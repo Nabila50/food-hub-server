@@ -12,17 +12,109 @@ datasource db {
   provider = "postgresql"
 }
 
-model User { 
-  id    Int     @id @default(autoincrement()) 
-  email String  @unique
-  name  String?
-  posts Post[]
-} 
-model Post { 
-  id        Int     @id @default(autoincrement()) 
-  title     String
-  content   String?
-  published Boolean @default(false) 
-  author    User    @relation(fields: [authorId], references: [id]) 
-  authorId  Int
-} 
+model User {
+  id        Int       @id @default(autoincrement())
+  name      String
+  email     String    @unique
+  role      ROLE      @default(CUSTOMER)
+  updatedAt DateTime  @default(now())
+  profile   Profile?
+  provider  Provider?
+  orders    Order[]
+  reviews   Review[]
+}
+
+model Profile {
+  id             Int       @id @default(autoincrement())
+  bio            String?
+  dateOfBirth    DateTime?
+  image          String
+  contanctNumber String
+
+  userId Int  @unique
+  user   User @relation(fields: [userId], references: [id])
+}
+
+model Provider {
+  id          Int    @id @default(autoincrement())
+  companyName String
+  role        String @default("PROVIDER")
+  userId      Int    @unique
+  user        User   @relation(fields: [userId], references: [id])
+
+  menus Menu[]
+}
+
+model Menu {
+  id          Int      @id @default(autoincrement())
+  title       String
+  isAvailable Boolean  @default(false)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  review      String
+
+  providerId  Int
+  menuCreator Provider @relation(fields: [providerId], references: [id])
+
+  menuItem menuItem[]
+}
+
+model menuItem {
+  id          Int     @id @default(autoincrement())
+  name        String?
+  description String
+  price       Decimal
+  isAvailable Boolean @default(true)
+
+  menuId  Int
+  menu    Menu        @relation(fields: [menuId], references: [id])
+  items   OrderItem[]
+  reviews Review[]
+}
+
+model Order {
+  id         Int         @id @default(autoincrement())
+  status     OrderStatus @default(PENDING)
+  totalPrice Decimal
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @default(now())
+
+  customerId Int
+  customaer  User @relation(fields: [customerId], references: [id])
+}
+
+model OrderItem {
+  id       Int     @id @default(autoincrement())
+  quantity Int     @default(1)
+  price    Decimal
+
+  menuItemId Int
+  menuItem   menuItem @relation(fields: [menuItemId], references: [id])
+}
+
+model Review {
+  id       Int      @id @default(autoincrement())
+  rating   Decimal
+  comment  String?
+  createAt DateTime @default(now())
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  menuId   Int
+  menuItem menuItem @relation(fields: [menuId], references: [id])
+}
+
+enum ROLE {
+  CUSTOMER
+  PROVIDER
+  ADMIN
+}
+
+enum OrderStatus {
+  PENDING
+  PREPARING
+  ONWAY
+  DELIVERED
+  CANCELLED
+}
