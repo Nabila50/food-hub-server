@@ -1,4 +1,4 @@
-import { prisma } from "./lib/prisma";
+import { prisma } from "./src/lib/prisma";
 
 async function run() {
   //^ create user
@@ -59,16 +59,16 @@ async function run() {
 
 // ^ create Review
 
-const reviewFromUser = await prisma.review.create({
-    data:{
-        rating: 4,
-        comment: "it is a very good food",
-        userId: 2,
-        menuId: 1
-    }
-})
+// const reviewFromUser = await prisma.review.create({
+//     data:{
+//         rating: 4,
+//         comment: "it is a very good food",
+//         userId: 2,
+//         menuId: 1
+//     }
+// })
 
-console.log("reviews", reviewFromUser)
+// console.log("reviews", reviewFromUser)
 
 // ? retrive all user
 

@@ -33,40 +33,46 @@ model Profile {
 
   userId Int  @unique
   user   User @relation(fields: [userId], references: [id])
+  @@index([userId])
 }
 
 model Provider {
-  id          Int    @id @default(autoincrement())
+  id          String    @id @default(uuid())
   companyName String
   role        String @default("PROVIDER")
   userId      Int    @unique
   user        User   @relation(fields: [userId], references: [id])
 
   menus Menu[]
+
+
 }
 
 model Menu {
-  id          Int      @id @default(autoincrement())
-  title       String
+  id          String      @id @default(uuid())
+  title       String @db.VarChar(225)
   isAvailable Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
   review      String
 
-  providerId  Int
+  providerId  String
   menuCreator Provider @relation(fields: [providerId], references: [id])
 
   menuItem menuItem[]
+
+    @@index([providerId])
 }
 
 model menuItem {
-  id          Int     @id @default(autoincrement())
+  id          String     @id @default(uuid())
   name        String?
-  description String
+  description String @db.Text
   price       Decimal
   isAvailable Boolean @default(true)
+  isFeatured Boolean @default(false)
 
-  menuId  Int
+  menuId  String
   menu    Menu        @relation(fields: [menuId], references: [id])
   items   OrderItem[]
   reviews Review[]
@@ -84,24 +90,24 @@ model Order {
 }
 
 model OrderItem {
-  id       Int     @id @default(autoincrement())
+  id       String     @id @default(uuid())
   quantity Int     @default(1)
   price    Decimal
 
-  menuItemId Int
+  menuItemId String
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
 }
 
 model Review {
-  id       Int      @id @default(autoincrement())
+  id       String      @id @default(uuid())
   rating   Decimal
-  comment  String?
+  comment  String? @db.Text
   createAt DateTime @default(now())
 
   userId Int
   user   User @relation(fields: [userId], references: [id])
 
-  menuId   Int
+  menuId   String
   menuItem menuItem @relation(fields: [menuId], references: [id])
 }
 
