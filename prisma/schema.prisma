@@ -13,15 +13,22 @@ datasource db {
 }
 
 model User {
-  id        Int       @id @default(autoincrement())
-  name      String
-  email     String    @unique
-  role      ROLE      @default(CUSTOMER)
-  updatedAt DateTime  @default(now())
-  profile   Profile?
-  provider  Provider?
-  orders    Order[]
-  reviews   Review[]
+  id            String       @id @default(uuid())
+  name          String
+  email         String    @unique
+  role          ROLE      @default(CUSTOMER)
+  updatedAt     DateTime  @updatedAt
+  profile       Profile?
+  provider      Provider?
+  orders        Order[]
+  reviews       Review[]
+  emailVerified Boolean   @default(false)
+  image         String?
+  createdAt     DateTime  @default(now())
+  sessions      Session[]
+  accounts      Account[]
+
+  
 }
 
 model Profile {
@@ -31,46 +38,44 @@ model Profile {
   image          String
   contanctNumber String
 
-  userId Int  @unique
+  userId String  @unique
   user   User @relation(fields: [userId], references: [id])
+
   @@index([userId])
 }
 
 model Provider {
-  id          String    @id @default(uuid())
+  id          String @id @default(uuid())
   companyName String
   role        String @default("PROVIDER")
-  userId      Int    @unique
+  userId      String    @unique
   user        User   @relation(fields: [userId], references: [id])
 
   menus Menu[]
-
-
 }
 
 model Menu {
-  id          String      @id @default(uuid())
-  title       String @db.VarChar(225)
+  id          String   @id @default(uuid())
+  title       String   @db.VarChar(225)
   isAvailable Boolean  @default(false)
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
-  review      String
 
   providerId  String
   menuCreator Provider @relation(fields: [providerId], references: [id])
 
   menuItem menuItem[]
 
-    @@index([providerId])
+  @@index([providerId])
 }
 
 model menuItem {
-  id          String     @id @default(uuid())
+  id          String  @id @default(uuid())
   name        String?
-  description String @db.Text
+  description String  @db.Text
   price       Decimal
   isAvailable Boolean @default(true)
-  isFeatured Boolean @default(false)
+  isFeatured  Boolean @default(false)
 
   menuId  String
   menu    Menu        @relation(fields: [menuId], references: [id])
@@ -85,26 +90,31 @@ model Order {
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @default(now())
 
-  customerId Int
-  customaer  User @relation(fields: [customerId], references: [id])
+  customerId String
+  customer   User @relation(fields: [customerId], references: [id])
+
+  orderItems OrderItem[]
 }
 
 model OrderItem {
-  id       String     @id @default(uuid())
+  id       String  @id @default(uuid())
   quantity Int     @default(1)
   price    Decimal
 
   menuItemId String
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
+
+  orderId Int
+  order   Order @relation(fields: [orderId], references: [id])
 }
 
 model Review {
-  id       String      @id @default(uuid())
+  id       String   @id @default(uuid())
   rating   Decimal
-  comment  String? @db.Text
+  comment  String?  @db.Text
   createAt DateTime @default(now())
 
-  userId Int
+  userId String
   user   User @relation(fields: [userId], references: [id])
 
   menuId   String
@@ -123,4 +133,52 @@ enum OrderStatus {
   ONWAY
   DELIVERED
   CANCELLED
+}
+
+model Session {
+  id        String   @id
+  expiresAt DateTime
+  token     String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([token])
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
 }

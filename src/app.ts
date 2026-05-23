@@ -1,15 +1,27 @@
-import express from "express";
-import { menuRouter } from "./modules/menu/menu.controller";
+import express, { Application } from "express";
+import { toNodeHandler } from "better-auth/node";
+import { auth } from "./lib/auth";
+import { providerRouter } from "./modules/provider/provider.router";
+import { menuRouter } from "./modules/menu/menu.router";
 
-const app = express();
 
-app.use(express.json())
+const app: Application = express();
+
+app.all('/api/auth/*splat', toNodeHandler(auth));
+
+app.use(express.json());
+
+app.use("/", menuRouter);
+
+app.use("/", providerRouter);
+
+
 
 app.get("/", (req, res)=>{
     res.send("hello, world")
 })
 
 
-app.use("/menus", menuRouter);
+
 
 export default app;

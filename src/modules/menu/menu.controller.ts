@@ -1,9 +1,17 @@
-import express from "express";
+import { Request, Response } from "express";
+import { menuService } from "./menu.service";
 
-const router = express.Router();
-
-router.post("/", (req, res)=>{
-    res.send("Create a new post");
-})
-
-export const menuRouter: Router = router;
+const createMenu = async (req:Request, res:Response) =>{
+    try{
+        const result = await menuService.createMenu(req.body)
+        res.status(200).json(result)
+    }catch(err){
+        res.status(400).json({
+            error: "Menu Cration Failed",
+            details: err
+        })
+    }
+}
+export const menuController = {
+    createMenu
+}
