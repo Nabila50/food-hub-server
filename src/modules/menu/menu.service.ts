@@ -1,37 +1,46 @@
- 
 import { prisma } from "../../lib/prisma";
- 
 
 type MenuItemPayload = {
-  name?: string | null
-  description: string
-  price: number | string
-  isAvailable?: boolean
-  isFeatured?: boolean
-}
+  name?: string | null;
+  description: string;
+  price: number | string;
+  isAvailable?: boolean;
+  isFeatured?: boolean;
+};
 
 type CreateMenuPayload = {
-  title: string
-  providerId: string
-  menuItem: MenuItemPayload[]
-}
+  title: string;
+  providerId: string;
+  menuItem: MenuItemPayload[];
+};
 
-const createMenu =  async(data: CreateMenuPayload) =>{
+const createMenu = async (data: CreateMenuPayload, userId: string) => {
+  const provider = await prisma.provider.findUnique({
+    where: {
+      userId: userId,
+    },
+  });
 
-    const result = await prisma.menu.create({
-        data: {
-          title: data.title,
-          providerId: data.providerId,
-          menuItem: {
-            create: data.menuItem
-          }
-        }
-    })
+  if (!provider) {
+    throw new Error("Provider not found");
+  }
 
-    return result;
- 
-}
+  const result = await prisma.menu.create({
+    data: {
+      title: data.title,
+
+      // use provider.id NOT user.id
+      providerId: provider.id,
+
+      menuItem: {
+        create: data.menuItem,
+      },
+    },
+  });
+
+  return result;
+};
 
 export const menuService = {
-    createMenu
-}
+  createMenu,
+};
