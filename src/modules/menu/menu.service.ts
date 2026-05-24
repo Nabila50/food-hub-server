@@ -1,6 +1,6 @@
-import { Prisma } from "../../../generated/prisma/client";
+ 
 import { prisma } from "../../lib/prisma";
-// import { prisma } from "../../lib/prisma";
+ 
 
 type MenuItemPayload = {
   name?: string | null

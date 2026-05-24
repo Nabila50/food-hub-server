@@ -1,7 +1,3 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Get a free hosted Postgres database in seconds: `npx create-db`
 
 generator client {
   provider = "prisma-client"
@@ -13,33 +9,29 @@ datasource db {
 }
 
 model User {
-  id            String       @id @default(uuid())
+  id            String    @id
   name          String
   email         String    @unique
   role          ROLE      @default(CUSTOMER)
-  updatedAt     DateTime  @updatedAt
-  profile       Profile?
-  provider      Provider?
-  orders        Order[]
-  reviews       Review[]
-  emailVerified Boolean   @default(false)
+  updatedAt     DateTime  @default(now()) @updatedAt
+  emailVerified Boolean?  @default(false)
   image         String?
   createdAt     DateTime  @default(now())
   sessions      Session[]
   accounts      Account[]
+  phone         String?
+  status        String?   @default("ACTIVE")
 
-  
+ 
 }
 
 model Profile {
-  id             Int       @id @default(autoincrement())
-  bio            String?
-  dateOfBirth    DateTime?
-  image          String
-  contanctNumber String
-
-  userId String  @unique
-  user   User @relation(fields: [userId], references: [id])
+  id            Int       @id @default(autoincrement())
+  bio           String?
+  dateOfBirth   DateTime?
+  image         String?
+  contactNumber String
+  userId        String    @unique
 
   @@index([userId])
 }
@@ -48,39 +40,34 @@ model Provider {
   id          String @id @default(uuid())
   companyName String
   role        String @default("PROVIDER")
-  userId      String    @unique
-  user        User   @relation(fields: [userId], references: [id])
-
-  menus Menu[]
+  userId      String @unique
+  menus       Menu[]
 }
 
 model Menu {
-  id          String   @id @default(uuid())
-  title       String   @db.VarChar(225)
-  isAvailable Boolean  @default(false)
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
-
+  id          String     @id @default(uuid())
+  title       String     @db.VarChar(225)
+  isAvailable Boolean    @default(false)
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
   providerId  String
-  menuCreator Provider @relation(fields: [providerId], references: [id])
-
-  menuItem menuItem[]
+  menuCreator Provider   @relation(fields: [providerId], references: [id])
+  menuItem    menuItem[]
 
   @@index([providerId])
 }
 
 model menuItem {
-  id          String  @id @default(uuid())
+  id          String      @id @default(uuid())
   name        String?
-  description String  @db.Text
+  description String
   price       Decimal
-  isAvailable Boolean @default(true)
-  isFeatured  Boolean @default(false)
-
-  menuId  String
-  menu    Menu        @relation(fields: [menuId], references: [id])
-  items   OrderItem[]
-  reviews Review[]
+  isAvailable Boolean     @default(true)
+  isFeatured  Boolean     @default(false)
+  menuId      String
+  items       OrderItem[]
+  reviews     Review[]
+  menu        Menu        @relation(fields: [menuId], references: [id])
 }
 
 model Order {
@@ -89,36 +76,28 @@ model Order {
   totalPrice Decimal
   createdAt  DateTime    @default(now())
   updatedAt  DateTime    @default(now())
-
   customerId String
-  customer   User @relation(fields: [customerId], references: [id])
-
   orderItems OrderItem[]
 }
 
 model OrderItem {
-  id       String  @id @default(uuid())
-  quantity Int     @default(1)
-  price    Decimal
-
+  id         String   @id @default(uuid())
+  quantity   Int      @default(1)
+  price      Decimal
   menuItemId String
+  orderId    Int
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
-
-  orderId Int
-  order   Order @relation(fields: [orderId], references: [id])
+  order      Order    @relation(fields: [orderId], references: [id])
 }
 
 model Review {
-  id       String   @id @default(uuid())
-  rating   Decimal
-  comment  String?  @db.Text
-  createAt DateTime @default(now())
-
-  userId String
-  user   User @relation(fields: [userId], references: [id])
-
-  menuId   String
-  menuItem menuItem @relation(fields: [menuId], references: [id])
+  id         String   @id @default(uuid())
+  rating     Decimal
+  comment    String?
+  createdAt  DateTime @default(now())
+  userId     String
+  menuItemId String
+  menuItem   menuItem @relation(fields: [menuItemId], references: [id])
 }
 
 enum ROLE {
@@ -148,7 +127,7 @@ model Session {
 
   @@unique([token])
   @@index([userId])
-  @@map("session")
+ 
 }
 
 model Account {
@@ -168,7 +147,7 @@ model Account {
   updatedAt             DateTime  @updatedAt
 
   @@index([userId])
-  @@map("account")
+ 
 }
 
 model Verification {
@@ -180,5 +159,5 @@ model Verification {
   updatedAt  DateTime @updatedAt
 
   @@index([identifier])
-  @@map("verification")
+ 
 }
