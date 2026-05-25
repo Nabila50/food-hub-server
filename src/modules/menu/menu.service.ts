@@ -1,3 +1,4 @@
+import { MenuWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 
 type MenuItemPayload = {
@@ -41,20 +42,59 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
 
 // fatching all the menu
 
-const getAllMenu = async(payload:{search: string | undefined})=>{
-  const allMenu = await prisma.menu.findMany({
-    where:{
-      OR: [
+
+
+const getAllMenu = async({
+  search,
+  isAvailable,
+  providerId
+}:{
+  search: string | undefined,
+  isAvailable: boolean | undefined,
+  providerId: string | undefined
+})=>{
+
+  const andConditions : MenuWhereInput[] = []
+
+  if(search){
+    andConditions.push({
+       OR: [
         {
           title: {
-            contains: payload.search as string,
+            contains: search as string,
             mode: "insensitive",
           }
         },
+        {
+          providerId :{
+            contains: search as string,
+            mode: "insensitive"
+          }
+        }
 
       ]
+    })
+  }
+
+  if(typeof isAvailable === 'boolean'){
+    andConditions.push({
+      isAvailable
+    })
+  }
+
+  if(providerId){
+    andConditions.push({providerId})
+  }
+
+
+  const allMenu = await prisma.menu.findMany({
+    where:{
+      AND: andConditions
     }
   });
+
+  
+  
   return allMenu;
 }
 

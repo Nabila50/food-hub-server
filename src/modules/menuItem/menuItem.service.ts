@@ -2,25 +2,30 @@
 
 import { prisma } from "../../lib/prisma";
 
-const getAllMenuItem = async (payload: { search: string | undefined }) => {
+const getAllMenuItem = async ({
+   search 
+  }: { 
+    search: string | undefined 
+  }) => {
+    
   const allMenuItem = await prisma.menuItem.findMany({
     where: {
       OR: [
         {
           name: {
-            contains: payload.search as string,
+            contains: search as string,
             mode: "insensitive",
           },
         },
         {
           description: {
-            contains: payload.search as string,
+            contains: search as string,
             mode: "insensitive",
           },
         },
         {
           price: {
-            equals: Number(payload.search),
+            equals: Number(search),
           },
         },
       ],

@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { menuService } from "./menu.service";
+import { boolean } from "better-auth";
 
 const createMenu = async (req: Request, res: Response) => {
   try {
@@ -23,9 +24,19 @@ const createMenu = async (req: Request, res: Response) => {
 
 const getAllMenu = async (req: Request, res: Response) => {
   try {
+    //* searching menu through name
+
     const {search} = req.query;
     const searchString = typeof search === "string" ? search:undefined;
-    const result = await menuService.getAllMenu({search: searchString ?? ""});
+
+    //^ searching menu through isAvailable
+    const isAvailable = req.query.isAvailable ? req.query.isAvailable === 'true' : undefined
+
+    // !searching providerId
+
+    const providerId = req.query.providerId as string | undefined;
+
+    const result = await menuService.getAllMenu({search: searchString, isAvailable, providerId});
     res.status(200).json(result)
   } catch (err) {
     res.status(400).json({
