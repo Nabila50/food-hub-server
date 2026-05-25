@@ -28,8 +28,6 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
   const result = await prisma.menu.create({
     data: {
       title: data.title,
-
-      // use provider.id NOT user.id
       providerId: provider.id,
 
       menuItem: {
@@ -41,6 +39,14 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
   return result;
 };
 
+// fatching all the menu
+
+const getAllMenu = async()=>{
+  const allMenu = await prisma.menu.findMany();
+  return allMenu;
+}
+
 export const menuService = {
   createMenu,
+  getAllMenu
 };

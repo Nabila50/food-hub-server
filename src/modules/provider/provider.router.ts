@@ -3,6 +3,6 @@ import { providerController } from "./provider.controller";
 
 const router = express.Router();
 
-router.post("/providers", providerController.createProvider);
+router.post("/", providerController.createProvider);
 
 export const providerRouter: Router= router;
