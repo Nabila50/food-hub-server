@@ -41,8 +41,20 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
 
 // fatching all the menu
 
-const getAllMenu = async()=>{
-  const allMenu = await prisma.menu.findMany();
+const getAllMenu = async(payload:{search: string | undefined})=>{
+  const allMenu = await prisma.menu.findMany({
+    where:{
+      OR: [
+        {
+          title: {
+            contains: payload.search as string,
+            mode: "insensitive",
+          }
+        },
+
+      ]
+    }
+  });
   return allMenu;
 }
 

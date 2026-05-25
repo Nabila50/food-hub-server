@@ -5,4 +5,4 @@ const router = expres.Router();
 
 router.get("/", menuItemController.getAllMenuItem);
 
-export const menuItemRouter: Router = router
+export const menuItemRouter: Router = router;

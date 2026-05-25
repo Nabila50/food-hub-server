@@ -59,10 +59,10 @@ model menuItem {
   name        String?
   description String
   price       Decimal
+  image       String?
   isAvailable Boolean     @default(true)
   isFeatured  Boolean     @default(false)
   menuId      String
-  image       String?
   items       OrderItem[]
   reviews     Review[]
   menu        Menu        @relation(fields: [menuId], references: [id])

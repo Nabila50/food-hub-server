@@ -5,8 +5,10 @@ import { menuItemService } from "./menuItem.service";
 const getAllMenuItem = async(req: Request, res: Response)=>{
 
     try{
+        const {search} = req.query
+        const searchString = typeof search === 'string' ? search:undefined
 
-        const result = await menuItemService.getAllMenuItem();
+        const result = await menuItemService.getAllMenuItem({search: searchString ?? ""});
         res.status(200).json(result) 
 
     }catch(err){

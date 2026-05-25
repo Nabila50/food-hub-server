@@ -23,7 +23,9 @@ const createMenu = async (req: Request, res: Response) => {
 
 const getAllMenu = async (req: Request, res: Response) => {
   try {
-    const result = await menuService.getAllMenu()
+    const {search} = req.query;
+    const searchString = typeof search === "string" ? search:undefined;
+    const result = await menuService.getAllMenu({search: searchString ?? ""});
     res.status(200).json(result)
   } catch (err) {
     res.status(400).json({
