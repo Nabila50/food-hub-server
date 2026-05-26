@@ -40,15 +40,14 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
   return result;
 };
 
-// fatching all the menu
-
-
+//* fatching all the menu
 
 const getAllMenu = async({
   search,
   isAvailable,
   providerId
 }:{
+  // * implement serch options
   search: string | undefined,
   isAvailable: boolean | undefined,
   providerId: string | undefined

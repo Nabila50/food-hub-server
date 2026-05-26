@@ -26,18 +26,28 @@ const getAllMenu = async (req: Request, res: Response) => {
   try {
     //* searching menu through name
 
-    const {search} = req.query;
-    const searchString = typeof search === "string" ? search:undefined;
+    const { search } = req.query;
+    const searchString = typeof search === "string" ? search : undefined;
 
     //^ searching menu through isAvailable
-    const isAvailable = req.query.isAvailable ? req.query.isAvailable === 'true' : undefined
+    const isAvailable = req.query.isAvailable
+      ? req.query.isAvailable === "true"
+        ? true
+        : req.query.isAvailable === "false"
+          ? false
+          : undefined
+      : undefined;
 
     // !searching providerId
 
     const providerId = req.query.providerId as string | undefined;
 
-    const result = await menuService.getAllMenu({search: searchString, isAvailable, providerId});
-    res.status(200).json(result)
+    const result = await menuService.getAllMenu({
+      search: searchString,
+      isAvailable,
+      providerId,
+    });
+    res.status(200).json(result);
   } catch (err) {
     res.status(400).json({
       error: "Cannot get all the menu",
@@ -48,5 +58,5 @@ const getAllMenu = async (req: Request, res: Response) => {
 
 export const menuController = {
   createMenu,
-  getAllMenu
+  getAllMenu,
 };
