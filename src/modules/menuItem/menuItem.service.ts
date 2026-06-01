@@ -47,18 +47,59 @@ const getAllMenuItem = async ({
     
   const allMenuItem = await prisma.menuItem.findMany({
 
-    take: limit,
-    skip,
+    // take: limit,
+    // skip,
     where: {
-      AND: andConditions
-    },
-    orderBy: {
-      [sortBy]: sortOrder
-    }
+      AND: andConditions}
+    // },
+    // orderBy: sortBy
+    // ? {
+    //     [sortBy]: sortOrder || "asc",
+    //   }
+    // : {
+    //     id: "desc",
+    //   },
   });
   return allMenuItem;
 };
 
+// * delete MenuItem
+const deleteMenuItem = async(menuitemsId: string, providerId: string) =>{
+    // FIND PROVIDER USING USER ID
+  // const provider = await prisma.provider.findUnique({
+  //   where: {
+  //     userId: providerId,
+  //   },
+  // });
+
+  // if (!provider) {
+  //   throw new Error("Provider not found");
+  // }
+  const MenuItemData = await prisma.menuItem.findFirst({
+    where:{
+      id: menuitemsId,
+       providerId
+    },
+    // select:{
+    //   id: true
+    // }
+  })
+  console.log(MenuItemData)
+  // if(!MenuItemData){
+  //   throw new Error("your provided input is invalid")
+  // }
+
+  // return await prisma.menuItem.delete({
+  //   where:{
+  //     id: MenuItemData.id
+  //   }
+  // })
+
+ 
+}
+
+
 export const menuItemService = {
   getAllMenuItem,
+  deleteMenuItem
 };

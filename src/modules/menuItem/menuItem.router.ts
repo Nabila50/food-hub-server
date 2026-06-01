@@ -1,8 +1,12 @@
-import expres, { Router } from 'express';
+import express, { Router } from 'express';
 import { menuItemController } from './menuItem.controller';
 
-const router = expres.Router();
+import auth, { UserRole } from '../../middlewares/auth';
+
+const router = express.Router();
 
 router.get("/", menuItemController.getAllMenuItem);
+
+router.delete("/:menuitemsId", auth(UserRole.ADMIN, UserRole.PROVIDER, UserRole.CUSTOMER), menuItemController.deleteMenuItem)
 
 export const menuItemRouter: Router = router;

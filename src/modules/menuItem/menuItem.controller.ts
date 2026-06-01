@@ -33,6 +33,27 @@ const getAllMenuItem = async (req: Request, res: Response) => {
   }
 };
 
+// * Delete MenuItem
+const deleteMenuItem = async (req: Request, res: Response)=>{
+  try{
+    const user = req.user;
+    const {menuitemsId} = req.params ;
+    const result = await menuItemService.deleteMenuItem(menuitemsId as string, user?.id as string);
+    res.status(200).json({
+      success: true,
+      message: "Menu item deleted successfully",
+      data: result,
+    });
+
+  }catch(err){
+    res.status(404).json({
+      error: "delete MenuItem failed!!!!",
+      details: err
+    })
+  }
+}
+
 export const menuItemController = {
   getAllMenuItem,
+  deleteMenuItem
 };

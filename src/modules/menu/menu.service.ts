@@ -5,23 +5,25 @@ type MenuItemPayload = {
   name?: string | null;
   description: string;
   price: number | string;
-  isAvailable?: boolean;
+  // isAvailable?: boolean;
   isFeatured?: boolean;
 };
 
 type CreateMenuPayload = {
   title: string;
-  providerId: string;
+  isAvailable?: boolean;
+  providerId: string | undefined;
   menuItem: MenuItemPayload[];
 };
 
-const createMenu = async (data: CreateMenuPayload, userId: string) => {
+const createMenu = async (data: CreateMenuPayload, providerId: string) => {
   const provider = await prisma.provider.findUnique({
     where: {
-      userId: userId,
+      userId: providerId,
     },
   });
-
+  console.log("Logged in user:", providerId);
+  console.log("provider: ", provider)
   if (!provider) {
     throw new Error("Provider not found");
   }
@@ -32,9 +34,20 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
       providerId: provider.id,
 
       menuItem: {
-        create: data.menuItem,
+        create: data.menuItem.map((item) => ({
+          name: item.name as string,
+          description: item.description,
+          price: Number(item.price),
+          isFeatured: item.isFeatured ?? false,
+          providerId: provider.id,
+        })),
       },
+       
     },
+    include: {
+      menuItem: true,
+      },
+   
   });
 
   return result;
@@ -42,62 +55,67 @@ const createMenu = async (data: CreateMenuPayload, userId: string) => {
 
 //* fatching all the menu
 
-const getAllMenu = async({
+const getAllMenu = async ({
   search,
   isAvailable,
-  providerId
-}:{
+  providerId,
+  page,
+  limit,
+  skip,
+  sortBy,
+  sortOrder,
+}: {
   // * implement serch options
-  search: string | undefined,
-  isAvailable: boolean | undefined,
-  providerId: string | undefined
-})=>{
+  search: string | undefined;
+  isAvailable: boolean | undefined;
+  providerId: string | undefined;
+  page: number;
+  limit: number;
+  skip: number;
+  sortBy: string;
+  sortOrder: string;
+}) => {
+  const andConditions: MenuWhereInput[] = [];
 
-  const andConditions : MenuWhereInput[] = []
-
-  if(search){
+  if (search) {
     andConditions.push({
-       OR: [
+      OR: [
         {
           title: {
             contains: search as string,
             mode: "insensitive",
-          }
+          },
         },
         {
-          providerId :{
+          providerId: {
             contains: search as string,
-            mode: "insensitive"
-          }
-        }
-
-      ]
-    })
+            mode: "insensitive",
+          },
+        },
+      ],
+    });
   }
 
-  if(typeof isAvailable === 'boolean'){
+  if (typeof isAvailable === "boolean") {
     andConditions.push({
-      isAvailable
-    })
+      isAvailable,
+    });
   }
 
-  if(providerId){
-    andConditions.push({providerId})
+  if (providerId) {
+    andConditions.push({ providerId });
   }
-
 
   const allMenu = await prisma.menu.findMany({
-    where:{
-      AND: andConditions
-    }
+    where: {
+      AND: andConditions,
+    },
   });
 
-  
-  
   return allMenu;
-}
+};
 
 export const menuService = {
   createMenu,
-  getAllMenu
+  getAllMenu,
 };

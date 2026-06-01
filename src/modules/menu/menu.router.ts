@@ -10,7 +10,7 @@ router.get("/", menuController.getAllMenu)
 
 router.post(
     "/",
-    auth(UserRole.ADMIN, UserRole.PROVIDER, UserRole.CUSTOMER),
+    auth(UserRole.ADMIN, UserRole.PROVIDER),
     menuController.createMenu)
 
 
