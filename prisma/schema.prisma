@@ -28,7 +28,7 @@ model Profile {
   bio           String?
   dateOfBirth   DateTime?
   image         String?
-  userId        String    @unique
+  userId        String?    @unique
   contactNumber String
 
   @@index([userId])
@@ -38,7 +38,7 @@ model Provider {
   id          String     @id @default(uuid())
   companyName String
   role        String     @default("PROVIDER")
-  userId      String     @unique
+  userId      String    @unique
   menus       Menu[]
   user        User       @relation(fields: [userId], references: [id])
   menuItem    menuItem[]

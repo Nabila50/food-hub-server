@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { menuService } from "./menu.service";
-import { boolean } from "better-auth";
+import { boolean, success } from "better-auth";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 
 const createMenu = async (req: Request, res: Response) => {
@@ -21,7 +21,7 @@ const createMenu = async (req: Request, res: Response) => {
   }
 };
 
-// fatching all the menu
+//* fatching all the menu
 
 const getAllMenu = async (req: Request, res: Response) => {
   try {
@@ -59,17 +59,42 @@ const getAllMenu = async (req: Request, res: Response) => {
     });
     res.status(200).json(result);
   } catch (err: any) {
-  console.log(err);
+    console.log(err);
 
-  res.status(400).json({
-    error: "Menu Creation Failed",
-    details: err.message,
-    stack: err.stack,
-  });
-}
+    res.status(400).json({
+      error: "Menu Creation Failed",
+      details: err.message,
+      stack: err.stack,
+    });
+  }
+};
+
+// * Delete Menu
+
+const deleteMenu = async (req: Request, res: Response) => {
+  try {
+    const user = req.user;
+    const { menuId } = req.params;
+
+    const result = await menuService.deleteMenu(
+      menuId as string,
+      user?.id as string,
+    );
+    
+    res.status(200).json({
+      success: "deleted successfully!!!",
+      details: result,
+    });
+  } catch (e) {
+    res.status(404).json({
+      error: "delete Menu failed",
+      details: e,
+    });
+  }
 };
 
 export const menuController = {
   createMenu,
   getAllMenu,
+  deleteMenu,
 };

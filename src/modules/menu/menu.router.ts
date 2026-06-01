@@ -13,5 +13,6 @@ router.post(
     auth(UserRole.ADMIN, UserRole.PROVIDER),
     menuController.createMenu)
 
+router.delete("/:menuId", auth(UserRole.ADMIN, UserRole.PROVIDER), menuController.deleteMenu)
 
 export const menuRouter: Router = router;

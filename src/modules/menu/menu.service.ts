@@ -115,7 +115,33 @@ const getAllMenu = async ({
   return allMenu;
 };
 
+// * Delete Menu
+
+const deleteMenu = async(menuId : string, providerId: string)=>{
+
+  const menuData = await prisma.menu.delete({
+    where:{
+      id: menuId,
+      providerId
+    },
+    select:{
+      id: true
+    }
+  })
+
+  if(!menuData){
+    throw new Error("Your provided input is invalid!!!")
+  }
+
+  return await prisma.menuItem.delete({
+    where:{
+      id: menuData.id
+    }
+  })
+}
+
 export const menuService = {
   createMenu,
   getAllMenu,
+  deleteMenu
 };
