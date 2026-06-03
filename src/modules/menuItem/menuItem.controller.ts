@@ -1,4 +1,4 @@
-import { Request, Response } from "express";
+import e, { Request, Response } from "express";
 import { menuItemService } from "./menuItem.service";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 import { UserRole } from "../../middlewares/auth";
@@ -124,6 +124,21 @@ const deleteMenuItem = async (req: Request, res: Response) => {
   }
 };
 
+// *getStats
+const getStats = async(req: Request, res: Response)=>{
+  try{
+    const result = await menuItemService.getStatus();
+    res.status(200).json(result)
+  }catch(error){
+    const errorMessage = (e instanceof Error) ? e.message: "stats fetched failed!"
+    res.status(400).json({
+      error: errorMessage,
+      details: e
+    })
+
+  }
+}
+
 export { deleteMenuItem };
 
 
@@ -167,4 +182,5 @@ export const menuItemController = {
   getAllMenuItem,
   deleteMenuItem,
   updateMenuItem,
+  getStats
 };

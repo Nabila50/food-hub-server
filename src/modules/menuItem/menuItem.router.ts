@@ -7,6 +7,7 @@ const router = express.Router();
 
 router.get("/", menuItemController.getAllMenuItem);
 
+router.get("/stats", auth(UserRole.ADMIN), menuItemController.getStats)
 
 
 router.delete("/:menuItemId", auth(UserRole.PROVIDER, UserRole.ADMIN), menuItemController.deleteMenuItem)

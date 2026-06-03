@@ -4,6 +4,7 @@ import { string } from "better-auth";
 import { menuItemWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import { Decimal } from "@prisma/client/runtime/client";
+import { OrderStatus } from "../../../generated/prisma/client";
 
 const getAllMenuItem = async ({
   search,
@@ -68,7 +69,7 @@ const getAllMenuItem = async ({
 const deleteMenuItem = async (
   menuItemId: string,
   providerId: string,
-  isAdmin: boolean
+  isAdmin: boolean,
 ) => {
   const menuItemData = await prisma.menuItem.findUnique({
     where: {
@@ -86,9 +87,7 @@ const deleteMenuItem = async (
 
   if (!isAdmin) {
     if (menuItemData.providerId !== providerId) {
-      throw new Error(
-        "You are not authorized to delete this menu item"
-      );
+      throw new Error("You are not authorized to delete this menu item");
     }
   }
 
@@ -112,7 +111,6 @@ const updateMenuItem = async (
   userId: string,
   role: string,
 ) => {
-
   if (role === "ADMIN") {
     return await prisma.menuItem.update({
       where: {
@@ -120,7 +118,7 @@ const updateMenuItem = async (
       },
       data,
     });
-  };
+  }
 
   const provider = await prisma.provider.findUnique({
     where: {
@@ -143,26 +141,42 @@ const updateMenuItem = async (
   if (!menuItem) {
     throw new Error("You are not allowed to update this");
   }
-
-  
 };
 
 // * stats
 
-const getStatus = async()=>{
-  return await prisma.$transaction(async(tx)=>{
-    const totalMenuItem = await tx.menuItem.count();
-    const pendingMenuItem = await tx.orderItem.count({
-      where:{
-        status: OrderStatus.PENDING
-      }
-    })
+const getStatus = async () => {
+  return await prisma.$transaction(async (tx) => {
+    const [totalMenuItem, pendingMenuItem, onWayMenuIte, totalMenu, cancleMenuItem, totalUser, adminCount, providerCount, customerCount, ] = await Promise.all([
+      await tx.menuItem.count(),
+      await tx.order.count({ where: { status: OrderStatus.PENDING } }),
+      await tx.order.count({ where: { status: OrderStatus.ONWAY } }),
+      await tx.order.count({ where: {status: OrderStatus.CANCELLED} }),
+      await tx.menu.count(),
+      await tx.user.count(),
+      await tx.user.count({where: {role:"ADMIN"}}),
+      await tx.user.count({where: {role:"PROVIDER"}}),
+      await tx.user.count({where: { role: "CUSTOMER"}})
+    ]);
 
-  })
-}
+    return {
+      totalMenuItem,
+      pendingMenuItem,
+      onWayMenuIte,
+      totalMenu,
+      cancleMenuItem,
+      totalUser,
+      adminCount,
+      providerCount,
+      customerCount
+
+    };
+  });
+};
 
 export const menuItemService = {
   getAllMenuItem,
   updateMenuItem,
-  deleteMenuItem
+  deleteMenuItem,
+  getStatus,
 };
