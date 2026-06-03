@@ -1,0 +1,9 @@
+model Provider {
+  id          String     @id @default(uuid())
+  companyName String
+  role        String     @default("PROVIDER")
+  userId      String     @unique
+  menus       Menu[]
+  user        User       @relation(fields: [userId], references: [id])
+  menuItem    menuItem[]
+}

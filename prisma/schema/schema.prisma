@@ -7,22 +7,7 @@ datasource db {
   provider = "postgresql"
 }
 
-model User {
-  id            String    @id
-  name          String
-  email         String    @unique
-  role          ROLE      @default(CUSTOMER)
-  updatedAt     DateTime  @default(now()) @updatedAt
-  createdAt     DateTime  @default(now())
-  emailVerified Boolean?  @default(false)
-  image         String?
-  phone         String?
-  status        String?   @default("ACTIVE")
-  accounts      Account[]
-  provider      Provider?
-  sessions      Session[]
-  order         Order[]
-}
+
 
 model Profile {
   id            Int       @id @default(autoincrement())
@@ -35,65 +20,6 @@ model Profile {
   @@index([userId])
 }
 
-model Provider {
-  id          String     @id @default(uuid())
-  companyName String
-  role        String     @default("PROVIDER")
-  userId      String     @unique
-  menus       Menu[]
-  user        User       @relation(fields: [userId], references: [id])
-  menuItem    menuItem[]
-}
-
-model Menu {
-  id          String     @id @default(uuid())
-  title       String     @db.VarChar(225)
-  isAvailable Boolean    @default(false)
-  createdAt   DateTime   @default(now())
-  updatedAt   DateTime   @updatedAt
-  providerId  String
-  menuCreator Provider   @relation(fields: [providerId], references: [id])
-  menuItem    menuItem[]
-
-  @@index([providerId])
-}
-
-model menuItem {
-  id          String      @id @default(uuid())
-  name        String?
-  description String
-  price       Decimal
-  isAvailable Boolean     @default(true)
-  isFeatured  Boolean     @default(false)
-  menuId      String
-  image       String?
-  providerId  String?
-  items       OrderItem[]
-  reviews     Review[]
-  menu        Menu        @relation(fields: [menuId], references: [id])
-  provider    Provider?   @relation(fields: [providerId], references: [id])
-}
-
-model Order {
-  id         String         @id @default(uuid())
-  status     OrderStatus    @default(PENDING)
-  totalPrice String?
-  createdAt  DateTime       @default(now())
-  updatedAt  DateTime       @default(now())
-  customerId String
-  customer   User?          @relation(fields: [customerId], references: [id])
-  orderItems OrderItem[]
-}
-
-model OrderItem {
-  id         String   @id @default(uuid())
-  quantity   Int      @default(1)
-  price      Decimal
-  menuItemId String
-  orderId    String?
-  menuItem   menuItem @relation(fields: [menuItemId], references: [id])
-  order      Order?    @relation(fields: [orderId], references: [id])
-}
 
 model Review {
   id         String   @id @default(uuid())
@@ -105,60 +31,7 @@ model Review {
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
 }
 
-model Session {
-  id        String   @id
-  expiresAt DateTime
-  token     String   @unique
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  ipAddress String?
-  userAgent String?
-  userId    String
-  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
-}
 
-model Account {
-  id                    String    @id
-  accountId             String
-  providerId            String
-  userId                String
-  accessToken           String?
-  refreshToken          String?
-  idToken               String?
-  accessTokenExpiresAt  DateTime?
-  refreshTokenExpiresAt DateTime?
-  scope                 String?
-  password              String?
-  createdAt             DateTime  @default(now())
-  updatedAt             DateTime  @updatedAt
-  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  @@index([userId])
-}
 
-model Verification {
-  id         String   @id
-  identifier String
-  value      String
-  expiresAt  DateTime
-  createdAt  DateTime @default(now())
-  updatedAt  DateTime @updatedAt
-
-  @@index([identifier])
-}
-
-enum ROLE {
-  CUSTOMER
-  PROVIDER
-  ADMIN
-}
-
-enum OrderStatus {
-  PENDING
-  PREPARING
-  ONWAY
-  DELIVERED
-  CANCELLED
-}

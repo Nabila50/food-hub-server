@@ -1,0 +1,27 @@
+model Order {
+  id         String         @id @default(uuid())
+  status     OrderStatus    @default(PENDING)
+  totalPrice String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @default(now())
+  customerId String
+  customer   User?          @relation(fields: [customerId], references: [id])
+  orderItems OrderItem[]
+}
+
+model OrderItem {
+  id         String   @id @default(uuid())
+  quantity   Int      @default(1)
+  price      Decimal
+  menuItemId String
+  orderId    String?
+  menuItem   menuItem @relation(fields: [menuItemId], references: [id])
+  order      Order?    @relation(fields: [orderId], references: [id])
+}
+enum OrderStatus {
+  PENDING
+  PREPARING
+  ONWAY
+  DELIVERED
+  CANCELLED
+}
