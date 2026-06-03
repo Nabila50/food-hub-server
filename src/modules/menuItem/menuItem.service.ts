@@ -65,28 +65,39 @@ const getAllMenuItem = async ({
 };
 
 // * delete MenuItem
-const deleteMenuItem = async (menuItemId: string, providerId: string) => {
-  const menuItemData = await prisma.menuItem.findFirst({
+const deleteMenuItem = async (
+  menuItemId: string,
+  providerId: string,
+  isAdmin: boolean
+) => {
+  const menuItemData = await prisma.menuItem.findUnique({
     where: {
       id: menuItemId,
-      // providerId
     },
     select: {
       id: true,
+      providerId: true,
     },
   });
 
   if (!menuItemData) {
-    throw new Error("Your provided input is invalid!!!!");
+    throw new Error("MenuItem not found!");
+  }
+
+  if (!isAdmin) {
+    if (menuItemData.providerId !== providerId) {
+      throw new Error(
+        "You are not authorized to delete this menu item"
+      );
+    }
   }
 
   return await prisma.menuItem.delete({
     where: {
-      id: menuItemData.id,
+      id: menuItemId,
     },
   });
 };
-
 // * update MenuItem
 const updateMenuItem = async (
   menuItemId: string,
@@ -100,7 +111,6 @@ const updateMenuItem = async (
   },
   userId: string,
   role: string,
-  isAdmin: boolean
 ) => {
 
   if (role === "ADMIN") {
@@ -131,14 +141,28 @@ const updateMenuItem = async (
   });
 
   if (!menuItem) {
-    throw new Error("menuItem is not found");
+    throw new Error("You are not allowed to update this");
   }
 
   
 };
 
+// * stats
+
+const getStatus = async()=>{
+  return await prisma.$transaction(async(tx)=>{
+    const totalMenuItem = await tx.menuItem.count();
+    const pendingMenuItem = await tx.orderItem.count({
+      where:{
+        status: OrderStatus.PENDING
+      }
+    })
+
+  })
+}
+
 export const menuItemService = {
   getAllMenuItem,
-  deleteMenuItem,
   updateMenuItem,
+  deleteMenuItem
 };
