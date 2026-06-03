@@ -3,6 +3,7 @@ import { menuService } from "./menu.service";
 import { boolean, success } from "better-auth";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
 
+// * Create Menu
 const createMenu = async (req: Request, res: Response) => {
   try {
     const user = req.user;
@@ -93,8 +94,25 @@ const deleteMenu = async (req: Request, res: Response) => {
   }
 };
 
+// * Update Menu
+const updateMenu = async(req: Request, res: Response)=>{
+  try{
+    const user = req.user;
+    console.log(user);
+    const {menuId} = req.params;
+    const result = await menuService.updateMenu(menuId as string, req.body, user?.id as string)
+    res.status(200).json(result)
+  }catch (e: any) {
+  res.status(400).json({
+    error: "Update is not possible!",
+    details: e.message
+  });
+}
+}
+
 export const menuController = {
   createMenu,
   getAllMenu,
   deleteMenu,
+  updateMenu,
 };

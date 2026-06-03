@@ -21,6 +21,7 @@ model User {
   accounts      Account[]
   provider      Provider?
   sessions      Session[]
+  order         Order[]
 }
 
 model Profile {
@@ -28,7 +29,7 @@ model Profile {
   bio           String?
   dateOfBirth   DateTime?
   image         String?
-  userId        String?    @unique
+  userId        String?   @unique
   contactNumber String
 
   @@index([userId])
@@ -38,7 +39,7 @@ model Provider {
   id          String     @id @default(uuid())
   companyName String
   role        String     @default("PROVIDER")
-  userId      String    @unique
+  userId      String     @unique
   menus       Menu[]
   user        User       @relation(fields: [userId], references: [id])
   menuItem    menuItem[]
@@ -74,12 +75,13 @@ model menuItem {
 }
 
 model Order {
-  id         Int         @id @default(autoincrement())
-  status     OrderStatus @default(PENDING)
-  totalPrice Decimal
-  createdAt  DateTime    @default(now())
-  updatedAt  DateTime    @default(now())
+  id         String         @id @default(uuid())
+  status     OrderStatus    @default(PENDING)
+  totalPrice String?
+  createdAt  DateTime       @default(now())
+  updatedAt  DateTime       @default(now())
   customerId String
+  customer   User?          @relation(fields: [customerId], references: [id])
   orderItems OrderItem[]
 }
 
@@ -88,9 +90,9 @@ model OrderItem {
   quantity   Int      @default(1)
   price      Decimal
   menuItemId String
-  orderId    Int
+  orderId    String?
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
-  order      Order    @relation(fields: [orderId], references: [id])
+  order      Order?    @relation(fields: [orderId], references: [id])
 }
 
 model Review {

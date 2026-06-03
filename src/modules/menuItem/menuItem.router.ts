@@ -7,10 +7,10 @@ const router = express.Router();
 
 router.get("/", menuItemController.getAllMenuItem);
 
-// router.delete("/:menuitemsId", auth(UserRole.ADMIN, UserRole.PROVIDER, UserRole.CUSTOMER), menuItemController.deleteMenuItem)
 
-router.delete("/:menuItemId", auth(UserRole.PROVIDER, UserRole.ADMIN ), menuItemController.deleteMenuItem
 
-)
+router.delete("/:menuItemId", auth(UserRole.PROVIDER, UserRole.ADMIN ), menuItemController.deleteMenuItem)
+
+router.patch("/:menuItemId", auth(UserRole.ADMIN, UserRole.PROVIDER), menuItemController.updateMenuItem)
 
 export const menuItemRouter: Router = router;

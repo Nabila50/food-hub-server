@@ -15,4 +15,6 @@ router.post(
 
 router.delete("/:menuId", auth(UserRole.ADMIN, UserRole.PROVIDER), menuController.deleteMenu)
 
+router.patch("/:menuId", auth(UserRole.ADMIN, UserRole.PROVIDER), menuController.updateMenu)
+
 export const menuRouter: Router = router;

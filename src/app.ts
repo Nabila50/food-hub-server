@@ -5,6 +5,7 @@ import { providerRouter } from "./modules/provider/provider.router";
 import { menuRouter } from "./modules/menu/menu.router";
 import cors from 'cors';;
 import { menuItemRouter } from "./modules/menuItem/menuItem.router";
+import { orderRouter } from "./modules/order/order.router";
 
 
 const app: Application = express();
@@ -23,6 +24,8 @@ app.use("/menus", menuRouter);
 app.use("/menuitems", menuItemRouter)
 
 app.use("/providers", providerRouter);
+
+app.use("/orders", orderRouter);
 
 
 

@@ -1,5 +1,8 @@
+import { Decimal } from "@prisma/client/runtime/client";
 import { MenuWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
+import { Prisma } from "../../../generated/prisma/client";
+// import { string } from "better-auth";
 
 type MenuItemPayload = {
   name?: string | null;
@@ -16,6 +19,17 @@ type CreateMenuPayload = {
   menuItem: MenuItemPayload[];
 };
 
+type UpdateMenuPayload = {
+  title?: string;
+  menuItem?: {
+    id: string;
+    name?: string;
+    image?: string;
+    price?: Decimal;
+    isFeatured?: boolean;
+  }[];
+};
+
 const createMenu = async (data: CreateMenuPayload, providerId: string) => {
   const provider = await prisma.provider.findUnique({
     where: {
@@ -23,7 +37,7 @@ const createMenu = async (data: CreateMenuPayload, providerId: string) => {
     },
   });
   console.log("Logged in user:", providerId);
-  console.log("provider: ", provider)
+  console.log("provider: ", provider);
   if (!provider) {
     throw new Error("Provider not found");
   }
@@ -42,12 +56,10 @@ const createMenu = async (data: CreateMenuPayload, providerId: string) => {
           providerId: provider.id,
         })),
       },
-       
     },
     include: {
       menuItem: true,
-      },
-   
+    },
   });
 
   return result;
@@ -117,31 +129,70 @@ const getAllMenu = async ({
 
 // * Delete Menu
 
-const deleteMenu = async(menuId : string, providerId: string)=>{
-
+const deleteMenu = async (menuId: string, providerId: string) => {
   const menuData = await prisma.menu.delete({
-    where:{
+    where: {
       id: menuId,
-      providerId
+      providerId,
     },
-    select:{
-      id: true
-    }
-  })
+    select: {
+      id: true,
+    },
+  });
 
-  if(!menuData){
-    throw new Error("Your provided input is invalid!!!")
+  if (!menuData) {
+    throw new Error("Your provided input is invalid!!!");
   }
 
   return await prisma.menuItem.delete({
-    where:{
-      id: menuData.id
-    }
-  })
-}
+    where: {
+      id: menuId,
+    },
+  });
+};
+
+// * update Menu
+const updateMenu = async (
+  menuId: string,
+  data: {
+    title?: string;
+    isAvailable?: boolean;
+  },
+  userId: string
+) => {
+
+  const provider = await prisma.provider.findUnique({
+    where: {
+      userId,
+    },
+  });
+
+  if (!provider) {
+    throw new Error("Provider not found");
+  }
+
+  const menu = await prisma.menu.findFirst({
+    where: {
+      id: menuId,
+      providerId: provider.id,
+    },
+  });
+
+  if (!menu) {
+    throw new Error("Menu not found");
+  }
+
+  return prisma.menu.update({
+    where: {
+      id: menuId,
+    },
+    data,
+  });
+};
 
 export const menuService = {
   createMenu,
   getAllMenu,
-  deleteMenu
+  deleteMenu,
+  updateMenu,
 };
