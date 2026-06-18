@@ -6,7 +6,8 @@ import auth, { UserRole } from "../../middlewares/auth";
 const router = express.Router();
 
 
-router.get("/", menuController.getAllMenu)
+router.get("/", menuController.getAllMenu);
+router.get("/:menuId", menuController.getMenuById);
 
 router.post(
     "/",

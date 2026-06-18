@@ -2,6 +2,9 @@ import { Request, Response } from "express";
 import { menuService } from "./menu.service";
 import { boolean, success } from "better-auth";
 import paginationSortingHelper from "../../helpers/paginationSortingHelper";
+import { role } from "better-auth/client";
+import { providerController } from "../provider/provider.controller";
+import { prisma } from "../../lib/prisma";
 
 // * Create Menu
 const createMenu = async (req: Request, res: Response) => {
@@ -9,15 +12,19 @@ const createMenu = async (req: Request, res: Response) => {
     const user = req.user;
     if (!user) {
       return res.status(400).json({
-        error: "Menu Cration Failed",
+        error: "Menu Cration Failed lack of user",
       });
     }
-    const result = await menuService.createMenu(req.body, user.id as string);
+    const result = await menuService.createMenu(
+      req.body,
+      user.id as string,
+      user.role,
+    );
     res.status(200).json(result);
-  } catch (err) {
+  } catch (err: any) {
     res.status(400).json({
-      error: "Menu Cration Failed",
-      details: err,
+      error: "Menu Cration Failed because of menu Service",
+      details: err.message,
     });
   }
 };
@@ -70,49 +77,108 @@ const getAllMenu = async (req: Request, res: Response) => {
   }
 };
 
+// * Get Single Menu By Id
+const getMenuById = async (req: Request, res: Response) => {
+  try {
+    const { menuId } = req.params;
+
+    const result = await menuService.getMenuById(menuId as string);
+
+    if (!result) {
+      return res.status(404).json({
+        error: "Menu not found",
+      });
+    }
+
+    res.status(200).json(result);
+  } catch (err: any) {
+    res.status(400).json({
+      error: "Failed to fetch menu",
+      details: err.message,
+    });
+  }
+};
+
 // * Delete Menu
+
+// const deleteMenu = async (req: Request, res: Response) => {
+//   try {
+//     const user = req.user;
+//     const { menuId } = req.params;
+
+//     const result = await menuService.deleteMenu(
+//       menuId as string,
+//       user?.id as string,
+//     );
+
+//     res.status(200).json({
+//       success: "deleted successfully!!!",
+//       details: result,
+//     });
+//   } catch (e) {
+//     res.status(404).json({
+//       error: "delete Menu failed",
+//       details: e,
+//     });
+//   }
+// };
 
 const deleteMenu = async (req: Request, res: Response) => {
   try {
     const user = req.user;
     const { menuId } = req.params;
 
+    const provider = await prisma.provider.findUnique({
+      where: {
+        userId: req.user?.id as string,
+      },
+    });
+
+    if (!provider) {
+      return res.status(400).json({
+        error: "Provider not found",
+      });
+    }
+    console.log("USER:", req.user);
+
     const result = await menuService.deleteMenu(
       menuId as string,
-      user?.id as string,
+      provider.id, 
     );
-    
-    res.status(200).json({
-      success: "deleted successfully!!!",
-      details: result,
-    });
-  } catch (e) {
-    res.status(404).json({
-      error: "delete Menu failed",
-      details: e,
+  } catch (e: any) {
+    console.error("DELETE FAILED:", e.message);
+
+    return res.status(400).json({
+      success: false,
+      error: e.message,
     });
   }
 };
 
 // * Update Menu
-const updateMenu = async(req: Request, res: Response)=>{
-  try{
+const updateMenu = async (req: Request, res: Response) => {
+  try {
     const user = req.user;
     console.log(user);
-    const {menuId} = req.params;
-    const result = await menuService.updateMenu(menuId as string, req.body, user?.id as string)
-    res.status(200).json(result)
-  }catch (e: any) {
-  res.status(400).json({
-    error: "Update is not possible!",
-    details: e.message
-  });
-}
-}
+    const { menuId } = req.params;
+    const result = await menuService.updateMenu(
+      menuId as string,
+      req.body,
+      user?.id as string,
+    );
+    res.status(200).json(result);
+  } catch (e: any) {
+    res.status(400).json({
+      error: "Update is not possible!",
+      details: e.message,
+    });
+  }
+};
 
 export const menuController = {
   createMenu,
   getAllMenu,
   deleteMenu,
   updateMenu,
+  getMenuById,
 };

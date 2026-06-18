@@ -9,35 +9,41 @@ type MenuItemPayload = {
   description: string;
   price: number | string;
   // isAvailable?: boolean;
+
   isFeatured?: boolean;
 };
 
 type CreateMenuPayload = {
   title: string;
   isAvailable?: boolean;
+  image: string;
   providerId: string | undefined;
   menuItem: MenuItemPayload[];
 };
 
-type UpdateMenuPayload = {
-  title?: string;
-  menuItem?: {
-    id: string;
-    name?: string;
-    image?: string;
-    price?: Decimal;
-    isFeatured?: boolean;
-  }[];
-};
+// type UpdateMenuPayload = {
+//   title?: string;
+//   menuItem?: {
+//     id: string;
+//     name?: string;
+//     image?: string;
+//     price?: Decimal;
+//     isFeatured?: boolean;
+//   }[];
+// };
 
-const createMenu = async (data: CreateMenuPayload, providerId: string) => {
+const createMenu = async (
+  data: CreateMenuPayload,
+  providerId: string,
+  role: string,
+) => {
   const provider = await prisma.provider.findUnique({
     where: {
       userId: providerId,
     },
   });
-  console.log("Logged in user:", providerId);
-  console.log("provider: ", provider);
+  // console.log("Logged in user:", providerId);
+  // console.log("provider: ", provider);
   if (!provider) {
     throw new Error("Provider not found");
   }
@@ -45,6 +51,7 @@ const createMenu = async (data: CreateMenuPayload, providerId: string) => {
   const result = await prisma.menu.create({
     data: {
       title: data.title,
+      image: data.image,
       providerId: provider.id,
 
       menuItem: {
@@ -122,32 +129,54 @@ const getAllMenu = async ({
     where: {
       AND: andConditions,
     },
+    include: {
+      menuItem: true,
+    },
   });
 
   return allMenu;
+};
+//* Get single menu by Id
+const getMenuById = async (id: string) => {
+  const menuData = await prisma.menu.findUnique({
+    where: {
+      id,
+    },
+    include: {
+      menuItem: true,
+    },
+  });
+
+  if (!menuData) {
+    throw new Error("Menu not found");
+  }
+
+  return menuData;
 };
 
 // * Delete Menu
 
 const deleteMenu = async (menuId: string, providerId: string) => {
-  const menuData = await prisma.menu.delete({
+  const menu = await prisma.menu.findFirst({
     where: {
       id: menuId,
-      providerId,
-    },
-    select: {
-      id: true,
     },
   });
 
-  if (!menuData) {
-    throw new Error("Your provided input is invalid!!!");
+  if (!menu) {
+    throw new Error("Menu not found")
+  };
+
+  if (menu.providerId !== providerId) {
+    throw new Error("Unauthorized");
   }
 
-  return await prisma.menuItem.delete({
-    where: {
-      id: menuId,
-    },
+  await prisma.menuItem.deleteMany({
+    where: { menuId },
+  });
+
+  return prisma.menu.delete({
+    where: { id: menuId },
   });
 };
 
@@ -158,9 +187,8 @@ const updateMenu = async (
     title?: string;
     isAvailable?: boolean;
   },
-  userId: string
+  userId: string,
 ) => {
-
   const provider = await prisma.provider.findUnique({
     where: {
       userId,
@@ -195,4 +223,5 @@ export const menuService = {
   getAllMenu,
   deleteMenu,
   updateMenu,
+  getMenuById,
 };
