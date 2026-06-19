@@ -34,25 +34,6 @@ const getAllMenuItem = async (req: Request, res: Response) => {
   }
 };
 
-// // * Delete MenuItem
-// const deleteMenuItem = async (req: Request, res: Response) => {
-//   try {
-//     const user = req.user;
-//     const { menuItemId } = req.params;
-
-//     const result = await menuItemService.deleteMenuItem(
-//       menuItemId as string,
-//       user?.id as string,
-//     );
-//     res.status(200).json(result);
-//   } catch (err) {
-//     res.status(404).json({
-//       error: "delete MenuItem failed!!!!",
-//       details: err,
-//     });
-//   }
-// };
-
 // * update MenuItem
 const updateMenuItem = async (req: Request, res: Response) => {
   try {

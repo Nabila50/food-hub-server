@@ -21,16 +21,18 @@ type CreateMenuPayload = {
   menuItem: MenuItemPayload[];
 };
 
-// type UpdateMenuPayload = {
-//   title?: string;
-//   menuItem?: {
-//     id: string;
-//     name?: string;
-//     image?: string;
-//     price?: Decimal;
-//     isFeatured?: boolean;
-//   }[];
-// };
+type UpdateMenuPayload = {
+  title?: string;
+  image?: string;
+  isAvailable?: boolean;
+
+  menuItem?: {
+    id: string;
+    name?: string;
+    image?: string;
+    price?: number;
+  }[];
+};
 
 const createMenu = async (
   data: CreateMenuPayload,
@@ -181,40 +183,116 @@ const deleteMenu = async (menuId: string, providerId: string) => {
 };
 
 // * update Menu
+// const updateMenu = async (
+//   menuId: string,
+//   data: {
+//     title?: string;
+//     isAvailable?: boolean;
+//   },
+//   userId: string,
+// ) => {
+//   const provider = await prisma.provider.findUnique({
+//     where: {
+//       userId,
+//     },
+//   });
+
+//   if (!provider) {
+//     throw new Error("Provider not found");
+//   }
+
+//   const menu = await prisma.menu.findFirst({
+//     where: {
+//       id: menuId,
+//       providerId: provider.id,
+//     },
+//   });
+
+//   if (!menu) {
+//     throw new Error("Menu not found");
+//   }
+
+//   return prisma.menu.update({
+//     where: {
+//       id: menuId,
+//     },
+//     data,
+//   });
+// };
 const updateMenu = async (
   menuId: string,
-  data: {
-    title?: string;
-    isAvailable?: boolean;
-  },
+  data: UpdateMenuPayload,
   userId: string,
+ 
 ) => {
+
   const provider = await prisma.provider.findUnique({
     where: {
       userId,
+    
     },
   });
-
+    
   if (!provider) {
     throw new Error("Provider not found");
   }
 
-  const menu = await prisma.menu.findFirst({
+  const menu = await prisma.menu.findUnique({
     where: {
       id: menuId,
-      providerId: provider.id,
+ 
+    },
+    include: {
+      menuItem: true,
     },
   });
-
   if (!menu) {
     throw new Error("Menu not found");
   }
 
-  return prisma.menu.update({
+  // Update Menu fields
+  // Update Menu fields
+  const updateData: any = {};
+  if (data.title !== undefined) updateData.title = data.title;
+  if (data.image !== undefined) updateData.image = data.image;
+  if (data.isAvailable !== undefined) updateData.isAvailable = data.isAvailable;
+
+  await prisma.menu.update({
+    where: { id: menuId },
+    data: updateData,
+  });
+
+  // Update Menu Items
+  if (data.menuItem?.length) {
+    await Promise.all(
+      data.menuItem.map((item) => {
+        const itemUpdateData: any = {};
+        if (item.name !== undefined) itemUpdateData.name = item.name;
+        if (item.price !== undefined) itemUpdateData.price = Number(item.price);
+        
+
+           if (Object.keys(itemUpdateData).length === 0) {
+        return;
+      }
+
+        return prisma.menuItem.update({
+          where: {
+            id: item.id,
+          },
+          data: itemUpdateData,
+        });
+      }),
+    );
+  }
+  console.log("UPDATE PAYLOAD:", JSON.stringify(data, null, 2));
+
+  return prisma.menu.findUnique({
     where: {
       id: menuId,
     },
-    data,
+    include: {
+      menuItem: true,
+    },
   });
 };
 
