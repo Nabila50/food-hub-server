@@ -2,14 +2,8 @@ import { Provider } from "../../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { UserRole } from "../../middlewares/auth";
 
-// const createProvider = async(data: Omit<Provider, "id">)=>{
 
-//     const result = await prisma.provider.create({
-//         data
-//     })
-
-//     return result;
-// }
+// * Create provider
 
 const createProvider = async (data: {
   companyName: string;
@@ -21,13 +15,13 @@ const createProvider = async (data: {
     },
   });
 
-  // If user is not found
+  //* If user is not found
 
   if (!user) {
     throw new Error("User is not found!!!!!");
   }
 
-  // if provider already exists
+  //* if provider already exists
   const existingProvider = await prisma.provider.findUnique({
     where: {
       userId: data.userId,
@@ -57,9 +51,27 @@ const createProvider = async (data: {
   });
 
   return result;
+
+ 
   
 };
 
+ // * get provider
+
+const getProviderById = async(userId: string)=>{
+  const result = await prisma.provider.findUnique({
+    where:{
+      userId
+    },
+    include:{
+      user: true
+    }
+  })
+  return result
+}
+
+
 export const providerService = {
   createProvider,
+  getProviderById
 };
