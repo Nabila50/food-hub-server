@@ -1,6 +1,7 @@
 import { boolean, includes, promise } from "better-auth";
 import { prisma } from "../../lib/prisma";
 import { OrderStatus } from "../../../generated/prisma/client";
+import { UserRole } from "../../middlewares/auth";
 
 export type TOrderItem = {
   menuItemId: string;
@@ -12,6 +13,7 @@ export type TCreateOrder = {
   items: TOrderItem[];
 };
 
+// * create Order
 const createOrder = async (customerId: string, items: TOrderItem[]) => {
   const menuItems = await prisma.menuItem.findMany({
     where: {
@@ -72,6 +74,7 @@ const getMyOrders = async (customerId: string) => {
       customerId,
     },
     include: {
+      customer: true,
       orderItems: {
         include: {
           menuItem: true,
@@ -97,30 +100,94 @@ const getOrderById = async (id: string) => {
 };
 
 // * update order Status
+// const updateOrderStatus = async (id: string, data: { status: OrderStatus }) => {
+
+//   
+//   const orderData= await prisma.order.findUnique({
+//     where: {
+//       id,
+//     },
+//     select:{
+//       id: true,
+//       status: true
+//     }
+//   });
+
+ 
+
+//   if(!orderData){
+//     throw new Error ("Order Status update is failed!!!")
+//   }
+
+//   if(orderData.status === data.status){
+//     throw new Error (`Your provided ${data.status} has already been updated!!`)
+//   }
+
+//   const updatedOrder =  await prisma.order.update({
+//     where: {
+//       id,
+//     },
+//     data
+//   });
+ 
+
+//   return updatedOrder;
+
+// };
+
 const updateOrderStatus = async (id: string, data: { status: OrderStatus }) => {
-  const orderData= await prisma.order.findUnique({
-    where: {
-      id,
-    },
-    select:{
+ 
+  const orderData = await prisma.order.findUnique({
+    where: { id },
+    select: {
       id: true,
-      status: true
-    }
+      status: true,
+    },
   });
 
-  if(!orderData){
-    throw new Error ("Order Status update is failed!!!")
+  if (!orderData) {
+    throw new Error("Order not found");
   }
 
-  if(orderData.status === data.status){
-    throw new Error (`Your provided ${data.status} has already been updated!!`)
+  if (orderData.status === data.status) {
+    throw new Error(`Status ${data.status} already exists`);
   }
 
-  return await prisma.order.update({
+  const updated = await prisma.order.update({
+    where: { id },
+    data,
+  });
+
+  return updated;
+};
+
+// * get order by roll
+const getOrdersByRole = async (userId: string, role: UserRole) => {
+  if (role === UserRole.ADMIN || role === UserRole.PROVIDER) {
+    return prisma.order.findMany({
+      include: {
+        customer: true,
+        orderItems: {
+          include: {
+            menuItem: true,
+          },
+        },
+      },
+    });
+  }
+
+  return prisma.order.findMany({
     where: {
-      id,
+      customerId: userId,
     },
-    data
+    include: {
+      customer: true,
+      orderItems: {
+        include: {
+          menuItem: true,
+        },
+      },
+    },
   });
 };
 
@@ -129,4 +196,5 @@ export const orderService = {
   getMyOrders,
   getOrderById,
   updateOrderStatus,
+  getOrdersByRole,
 };

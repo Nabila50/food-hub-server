@@ -13,6 +13,7 @@ model User {
   provider      Provider?
   sessions      Session[]
   order         Order[]
+  reviews       Review[]
 }
 
 enum ROLE {

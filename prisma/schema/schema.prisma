@@ -7,8 +7,6 @@ datasource db {
   provider = "postgresql"
 }
 
-
-
 model Profile {
   id            Int       @id @default(autoincrement())
   bio           String?
@@ -20,7 +18,6 @@ model Profile {
   @@index([userId])
 }
 
-
 model Review {
   id         String   @id @default(uuid())
   rating     Decimal
@@ -29,9 +26,5 @@ model Review {
   createdAt  DateTime @default(now())
   menuItemId String
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
+  user       User?    @relation(fields: [userId], references: [id])
 }
-
-
-
-
-

@@ -70,8 +70,22 @@ const getProviderById = async(userId: string)=>{
   return result
 }
 
+// * get All Providers
+
+const getAllProviders = async ()=>{
+  const result = await prisma.provider.findMany({
+     include: {
+    user: true,
+    menus: true,
+    menuItem: true,
+  },
+  })
+  return result;
+}
+
 
 export const providerService = {
   createProvider,
-  getProviderById
+  getProviderById,
+  getAllProviders
 };

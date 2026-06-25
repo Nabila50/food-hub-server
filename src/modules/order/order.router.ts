@@ -5,9 +5,13 @@ import auth, { UserRole } from '../../middlewares/auth';
 
 const router = express.Router();
 
-router.post("/", auth(UserRole.ADMIN, UserRole.PROVIDER), orderController.createOrder)
+router.post("/", auth(UserRole.ADMIN, UserRole.PROVIDER, UserRole.CUSTOMER), orderController.createOrder)
 
-router.get("/", orderController.getMyOrders)
+router.get(
+  "/",
+  auth(UserRole.ADMIN, UserRole.PROVIDER, UserRole.CUSTOMER),
+  orderController.getMyOrders
+)
 
 router.get("/:orderId", orderController.getOrderById)
 

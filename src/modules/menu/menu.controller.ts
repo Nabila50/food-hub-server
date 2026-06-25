@@ -101,28 +101,6 @@ const getMenuById = async (req: Request, res: Response) => {
 
 // * Delete Menu
 
-// const deleteMenu = async (req: Request, res: Response) => {
-//   try {
-//     const user = req.user;
-//     const { menuId } = req.params;
-
-//     const result = await menuService.deleteMenu(
-//       menuId as string,
-//       user?.id as string,
-//     );
-
-//     res.status(200).json({
-//       success: "deleted successfully!!!",
-//       details: result,
-//     });
-//   } catch (e) {
-//     res.status(404).json({
-//       error: "delete Menu failed",
-//       details: e,
-//     });
-//   }
-// };
-
 const deleteMenu = async (req: Request, res: Response) => {
   try {
     const user = req.user;

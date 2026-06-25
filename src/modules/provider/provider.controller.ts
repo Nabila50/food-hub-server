@@ -41,7 +41,26 @@ const getProviderById = async (req: Request, res: Response) => {
   }
 };
 
+// *Get All Providers
+const getAllProviders = async (_req: Request, res: Response) => {
+  try {
+    const providers = await providerService.getAllProviders();
+
+    return res.status(200).json({
+      success: true,
+      data: providers,
+    });
+  } catch (error) {
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch providers",
+    });
+  }
+};
+
+
 export const providerController = {
   createProvider,
-  getProviderById
+  getProviderById,
+  getAllProviders
 };

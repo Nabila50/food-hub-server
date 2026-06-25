@@ -5,6 +5,8 @@ const router = express.Router();
 
 router.get("/providerId", providerController.getProviderById);
 
+router.get("/", providerController.getAllProviders);
+
 router.post("/", providerController.createProvider);
 
 
