@@ -15,6 +15,13 @@ router.get(
 
 router.get("/:orderId", orderController.getOrderById)
 
-router.patch("/:orderId", auth(UserRole.ADMIN, UserRole.PROVIDER), orderController.updateOrderStatus)
-
+router.patch(
+  "/:orderId",
+  auth(
+    UserRole.ADMIN,
+    UserRole.PROVIDER,
+    UserRole.CUSTOMER
+  ),
+  orderController.updateOrderStatus
+);
 export const orderRouter: Router = router;

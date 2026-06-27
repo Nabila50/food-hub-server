@@ -53,14 +53,10 @@ const getAllMenuItem = async ({
     where: {
       AND: andConditions,
     },
-    // },
-    // orderBy: sortBy
-    // ? {
-    //     [sortBy]: sortOrder || "asc",
-    //   }
-    // : {
-    //     id: "desc",
-    //   },
+    include: {
+    reviews: true, 
+  },
+   
   });
   return allMenuItem;
 };

@@ -77,6 +77,20 @@ const updateOrderStatus = async (req: Request, res: Response) => {
   try {
 
     const { orderId } = req.params;
+     const { status } = req.body;
+
+    const role = (req.user as any)?.role;
+
+    if (
+      role === "CUSTOMER" &&
+      status !== "CANCELLED"
+    ) {
+      return res.status(403).json({
+        success: false,
+        message:
+          "Customer can only cancel orders",
+      });
+    }
 
     const result = await orderService.updateOrderStatus(
       orderId as string,
