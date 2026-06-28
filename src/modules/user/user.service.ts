@@ -13,8 +13,19 @@ export const getMyProfile = async (userId: string) => {
   });
 };
 
+export const getAllCustomers = async () => {
+  return await prisma.user.findMany({
+    where: {
+      role: "CUSTOMER",
+    },
+    orderBy: {
+      createdAt: "desc",
+    },
+  });
+};
+
 
 export const userService = {
   getMyProfile,
- 
+ getAllCustomers
 };

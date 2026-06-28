@@ -29,7 +29,8 @@
     "start": "node --loader tsx src/server.ts",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "npx tsx watch src/server.ts",
-    "seed:admin": "npx tsx src/scripts/seedAdmin.ts"
+    "seed:admin": "npx tsx src/scripts/seedAdmin.ts",
+    "build": "tsc"
   },
   "keywords": [],
   "author": "",

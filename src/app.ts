@@ -11,6 +11,7 @@ import { reviewRouter } from "./modules/review/review.router";
 
 
 const app: Application = express();
+app.use(express.json());
 
 app.use(cors({
     origin: process.env.APP_URL || "http://localhost:3000",
@@ -19,7 +20,7 @@ app.use(cors({
 
 app.all('/api/auth/*splat', toNodeHandler(auth));
 
-app.use(express.json());
+
 
 app.use("/menus", menuRouter);
 
@@ -36,10 +37,12 @@ app.use("/reviews", reviewRouter);
 
 
 app.get("/", (req, res)=>{
-    res.send("hello, world")
+    res.status(200).send("Hello World!...API is working");
 })
 
-
+// app.get("/favicon.ico", (req, res) => {
+//   res.status(204).end();
+// });
 
 
 export default app;

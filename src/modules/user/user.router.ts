@@ -6,6 +6,12 @@ import auth, { UserRole } from "../../middlewares/auth";
 const router = express.Router();
 
 router.get(
+  "/",
+  auth(UserRole.ADMIN, UserRole.PROVIDER),
+  userController.getAllCustomers
+);
+
+router.get(
   "/profile",
   auth(UserRole.ADMIN, UserRole.CUSTOMER, UserRole.PROVIDER),
   userController.getMyProfile

@@ -1,4 +1,5 @@
-import app from "./app";
+ 
+import app from "./app.js";
 import { prisma } from "./lib/prisma";
 
 const PORT = process.env.PORT || 5000;
@@ -19,3 +20,5 @@ async function main(){
 }
 
 main();
+
+export default app;

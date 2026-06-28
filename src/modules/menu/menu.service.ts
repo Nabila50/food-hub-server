@@ -2,14 +2,12 @@ import { Decimal } from "@prisma/client/runtime/client";
 import { MenuWhereInput } from "../../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import { Prisma } from "../../../generated/prisma/client";
-// import { string } from "better-auth";
+
 
 type MenuItemPayload = {
   name?: string | null;
   description: string;
   price: number | string;
-  // isAvailable?: boolean;
-
   isFeatured?: boolean;
 };
 
@@ -44,8 +42,7 @@ const createMenu = async (
       userId: providerId,
     },
   });
-  // console.log("Logged in user:", providerId);
-  // console.log("provider: ", provider);
+ 
   if (!provider) {
     throw new Error("Provider not found");
   }
@@ -183,42 +180,7 @@ const deleteMenu = async (menuId: string, providerId: string) => {
 };
 
 // * update Menu
-// const updateMenu = async (
-//   menuId: string,
-//   data: {
-//     title?: string;
-//     isAvailable?: boolean;
-//   },
-//   userId: string,
-// ) => {
-//   const provider = await prisma.provider.findUnique({
-//     where: {
-//       userId,
-//     },
-//   });
-
-//   if (!provider) {
-//     throw new Error("Provider not found");
-//   }
-
-//   const menu = await prisma.menu.findFirst({
-//     where: {
-//       id: menuId,
-//       providerId: provider.id,
-//     },
-//   });
-
-//   if (!menu) {
-//     throw new Error("Menu not found");
-//   }
-
-//   return prisma.menu.update({
-//     where: {
-//       id: menuId,
-//     },
-//     data,
-//   });
-// };
+ 
 const updateMenu = async (
   menuId: string,
   data: UpdateMenuPayload,
@@ -251,7 +213,7 @@ const updateMenu = async (
   }
 
   // Update Menu fields
-  // Update Menu fields
+ 
   const updateData: any = {};
   if (data.title !== undefined) updateData.title = data.title;
   if (data.image !== undefined) updateData.image = data.image;
@@ -284,7 +246,7 @@ const updateMenu = async (
       }),
     );
   }
-  console.log("UPDATE PAYLOAD:", JSON.stringify(data, null, 2));
+ 
 
   return prisma.menu.findUnique({
     where: {

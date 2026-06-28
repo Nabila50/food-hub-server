@@ -34,7 +34,29 @@ export const getMyProfile = async (
   }
 };
 
+// * get all customers
+export const getAllCustomers = async (
+  req: Request,
+  res: Response
+) => {
+  try {
+    const customers = await userService.getAllCustomers();
+
+    return res.status(200).json({
+      success: true,
+      data: customers,
+    });
+  } catch (error) {
+    console.error(error);
+
+    return res.status(500).json({
+      success: false,
+      message: "Internal server error",
+    });
+  }
+};
+
 export const userController = {
   getMyProfile,
- 
+  getAllCustomers,
 };
