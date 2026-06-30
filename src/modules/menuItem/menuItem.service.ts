@@ -1,10 +1,10 @@
 // fatching all the items
 
 import { string } from "better-auth";
-import { menuItemWhereInput } from "../../../generated/prisma/models";
+import { menuItemWhereInput } from "../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
 import { Decimal } from "@prisma/client/runtime/client";
-import { OrderStatus } from "../../../generated/prisma/client";
+import { OrderStatus } from "../../generated/prisma/client";
 
 const getAllMenuItem = async ({
   search,

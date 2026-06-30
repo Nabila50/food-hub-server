@@ -1,12 +1,13 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
-import { prisma } from "./prisma";
+import { prisma } from "./prisma.js";
 import nodemailer from "nodemailer";
+import { oAuthProxy } from "better-auth/plugins";
 
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, // use STARTTLS (upgrade connection to TLS after connecting)
+  secure: false, 
   auth: {
     user: process.env.APP_USER,
     pass: process.env.APP_PASS,
@@ -17,6 +18,7 @@ export const auth = betterAuth({
   database: prismaAdapter(prisma, {
     provider: "postgresql",
   }),
+  baseURL: process.env.APP_URL,
   trustedOrigins: [process.env.APP_URL!],
 
   user: {
@@ -50,10 +52,10 @@ export const auth = betterAuth({
       try {
         const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
         const info = await transporter.sendMail({
-          from: '"Food Hub" <foodhub@fh.com>', // sender address
-          to: user.email, // list of recipients
-          subject: "Food Hub Email Verification", // subject line
-          text: "Welcome to Our Food Hub.", // plain text body
+          from: '"Food Hub" <foodhub@fh.com>',  
+          to: user.email,  
+          subject: "Food Hub Email Verification", 
+          text: "Welcome to Our Food Hub.", 
 
           html: `<!DOCTYPE html>
                   <html>
@@ -158,4 +160,31 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
+
+  // advanced:{
+  //   cookies:{
+  //     session_token:{
+  //       name: "session_token",
+  //       attributes:{
+  //         httpOnly:true,
+  //         secure: true,
+  //         sameSite:"none",
+  //         partitioned: true,
+
+  //       },
+  //     },
+  //     state:{
+  //         name: "session_token",
+  //         attributes:{
+  //           httpOnly: true,
+  //           secure: true,
+  //           sameSite: "none",
+  //           partitioned: true
+
+  //         },
+  //       },
+  //   },
+  // },
+
+  plugins: [oAuthProxy()]
 });

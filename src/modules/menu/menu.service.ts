@@ -1,7 +1,7 @@
 import { Decimal } from "@prisma/client/runtime/client";
-import { MenuWhereInput } from "../../../generated/prisma/models";
+import { MenuWhereInput } from "../../generated/prisma/models";
 import { prisma } from "../../lib/prisma";
-import { Prisma } from "../../../generated/prisma/client";
+import { Prisma } from "../../generated/prisma/client";
 
 
 type MenuItemPayload = {

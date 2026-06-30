@@ -1,5 +1,3 @@
-
-
 {
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
@@ -9,12 +7,12 @@
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
     "module": "ESNext",
-    "moduleResolution": "node",
+    "moduleResolution": "bundler",
     "target": "ES2023",
-    "types": [],
+    // "types": [],
     // For nodejs:
-    // "lib": ["esnext"],
-    // "types": ["node"],
+    "lib": ["esnext"],
+    "types": ["node"],
     // and npm install -D @types/node
     // Other Outputs
     // "sourceMap": true,
@@ -41,11 +39,11 @@
     "esModuleInterop": true,
   },
   "include": [
-    "src/**/*"
+    "src/**/*" 
   ],
   "exclude": [
     "node_modules",
     "dist",
-    "generated/prisma"
+    "src/generated/prisma"
   ]
 }

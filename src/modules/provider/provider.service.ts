@@ -1,4 +1,4 @@
-import { Provider } from "../../../generated/prisma/client";
+import { Provider } from "../../generated/prisma/client";
 import { prisma } from "../../lib/prisma";
 import { UserRole } from "../../middlewares/auth";
 

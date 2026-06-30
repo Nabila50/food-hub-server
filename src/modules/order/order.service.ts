@@ -1,7 +1,8 @@
 import { boolean, includes, promise } from "better-auth";
 import { prisma } from "../../lib/prisma";
-import { OrderStatus } from "../../../generated/prisma/client";
+// import { OrderStatus } from "../../generated/prisma/client";
 import { UserRole } from "../../middlewares/auth";
+import { OrderStatus, menuItem as MenuItem } from "../../generated/prisma/client";
 
 export type TOrderItem = {
   menuItemId: string;
@@ -30,7 +31,7 @@ const createOrder = async (customerId: string, items: TOrderItem[]) => {
   let totalPrice = 0;
 
   const orderItemsData = items.map((item) => {
-    const menu = menuItems.find((menu) => menu.id === item.menuItemId);
+    const menu = menuItems.find((menu: MenuItem) => menu.id === item.menuItemId);
 
     if (!menu) {
       throw new Error(`Menu item not found`);
@@ -99,41 +100,6 @@ const getOrderById = async (id: string) => {
   });
 };
 
-// * update order Status
-// const updateOrderStatus = async (id: string, data: { status: OrderStatus }) => {
-
-//   
-//   const orderData= await prisma.order.findUnique({
-//     where: {
-//       id,
-//     },
-//     select:{
-//       id: true,
-//       status: true
-//     }
-//   });
-
- 
-
-//   if(!orderData){
-//     throw new Error ("Order Status update is failed!!!")
-//   }
-
-//   if(orderData.status === data.status){
-//     throw new Error (`Your provided ${data.status} has already been updated!!`)
-//   }
-
-//   const updatedOrder =  await prisma.order.update({
-//     where: {
-//       id,
-//     },
-//     data
-//   });
- 
-
-//   return updatedOrder;
-
-// };
 
 const updateOrderStatus = async (id: string, data: { status: OrderStatus }) => {
  
