@@ -10,10 +10,10 @@ model User {
   phone         String?
   status        String?   @default("ACTIVE")
   accounts      Account[]
-  provider      Provider?
-  sessions      Session[]
   order         Order[]
+  provider      Provider?
   reviews       Review[]
+  sessions      Session[]
 }
 
 enum ROLE {

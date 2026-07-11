@@ -12,18 +12,4 @@ model Menu {
   @@index([providerId])
 }
 
-model menuItem {
-  id          String      @id @default(uuid())
-  name        String?
-  description String
-  price       Decimal
-  isAvailable Boolean     @default(true)
-  isFeatured  Boolean     @default(false)
-  menuId      String
-  image       String?
-  providerId  String?
-  items       OrderItem[]
-  reviews     Review[]
-  menu        Menu        @relation(fields: [menuId], references: [id])
-  provider    Provider?   @relation(fields: [providerId], references: [id])
-}
+

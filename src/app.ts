@@ -8,20 +8,25 @@ import { menuItemRouter } from "./modules/menuItem/menuItem.router";
 import { orderRouter } from "./modules/order/order.router";
 import { userRouter } from "./modules/user/user.router";
 import { reviewRouter } from "./modules/review/review.router";
+import { paymentController } from "./modules/payment/payment.controller";
+import { paymentRouter } from "./modules/payment/payment.router";
 
 
 const app: Application = express();
-app.use(express.json());
-
-app.post("/webhook", express.raw({type: "application/json"}), async(req: Request, res: Response)=>{
-    console.log("webhook received: ", req.body);
-    res.status(200).json({received: true})
-})
 
 app.use(cors({
-    origin: process.env.APP_URL || "http://localhost:3000",
+    origin: process.env.FRONTEND_URL! || "http://localhost:3000", //* client side url
     credentials: true,
 }))
+
+app.use(express.json());
+
+
+// app.post("/webhook", express.raw({type: "application/json"}), paymentController.handleStripeWebhookEvent
+// )
+
+
+
 
 app.all('/api/auth/*splat', toNodeHandler(auth));
 
@@ -38,6 +43,10 @@ app.use("/orders", orderRouter);
 app.use("/users", userRouter);
 
 app.use("/reviews", reviewRouter);
+
+app.use("/payment", paymentRouter);
+
+
 
 
 

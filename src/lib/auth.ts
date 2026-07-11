@@ -7,7 +7,7 @@ import { oAuthProxy } from "better-auth/plugins";
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: false, 
+  secure: false,
   auth: {
     user: process.env.APP_USER,
     pass: process.env.APP_PASS,
@@ -19,8 +19,7 @@ export const auth = betterAuth({
     provider: "postgresql",
   }),
   baseURL: process.env.APP_URL,
-  trustedOrigins: [process.env.APP_URL!],
-
+  trustedOrigins: [process.env.FRONTEND_URL!, "http://localhost:3000"],
   user: {
     additionalFields: {
       role: {
@@ -50,12 +49,12 @@ export const auth = betterAuth({
     autoSignInAfterVerification: true,
     sendVerificationEmail: async ({ user, url, token }, request) => {
       try {
-        const verificationUrl = `${process.env.APP_URL}/verify-email?token=${token}`;
+        const verificationUrl = `${process.env.FRONTEND_URL}/verify-email?token=${token}`;
         const info = await transporter.sendMail({
-          from: '"Food Hub" <foodhub@fh.com>',  
-          to: user.email,  
-          subject: "Food Hub Email Verification", 
-          text: "Welcome to Our Food Hub.", 
+          from: '"Food Hub" <foodhub@fh.com>',
+          to: user.email,
+          subject: "Food Hub Email Verification",
+          text: "Welcome to Our Food Hub.",
 
           html: `<!DOCTYPE html>
                   <html>
@@ -125,6 +124,9 @@ export const auth = betterAuth({
                   <p style="font-size:14px; color:#666666; margin-top:30px;">
                     If you didn’t create an account, you can safely ignore this email.
                   </p>
+                  <p class="link">
+                      ${url}
+                  </p>
                 </td>
               </tr>
 
@@ -155,36 +157,26 @@ export const auth = betterAuth({
   socialProviders: {
     google: {
       prompt: "select_account consent",
-      accessType: "offline", 
+      accessType: "offline",
       clientId: process.env.GOOGLE_CLIENT_ID as string,
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     },
   },
 
-  // advanced:{
-  //   cookies:{
-  //     session_token:{
-  //       name: "session_token",
-  //       attributes:{
-  //         httpOnly:true,
-  //         secure: true,
-  //         sameSite:"none",
-  //         partitioned: true,
+ 
+advanced: {
+  cookies: {
+    session_token: {
+      attributes: {
+        httpOnly: true,
+        secure: true,
+        sameSite: "none",
+      },
+    },
+  },
+},
 
-  //       },
-  //     },
-  //     state:{
-  //         name: "session_token",
-  //         attributes:{
-  //           httpOnly: true,
-  //           secure: true,
-  //           sameSite: "none",
-  //           partitioned: true
+  // plugins: [oAuthProxy()],
+    plugins: [],
 
-  //         },
-  //       },
-  //   },
-  // },
-
-  plugins: [oAuthProxy()]
 });

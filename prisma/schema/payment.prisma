@@ -1,0 +1,17 @@
+model Payment {
+    id                 String        @id @default(uuid(7))
+    amount             Float
+    transactionId      String        @unique
+    status             PaymentStatus @default(UNPAID)
+    paymentGatewayData Json?
+    createdAt          DateTime      @default(now())
+    updatedAt          DateTime      @updatedAt
+
+    menuItemId String
+    menuItem   menuItem   @relation(fields: [menuItemId], references: [id])
+}
+
+enum PaymentStatus {
+    PAID
+    UNPAID
+}

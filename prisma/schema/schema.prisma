@@ -1,6 +1,6 @@
 generator client {
   provider = "prisma-client"
-  output   = "../src/generated/prisma"
+  output   = "../../src/generated/prisma"
 }
 
 datasource db {
@@ -26,5 +26,5 @@ model Review {
   createdAt  DateTime @default(now())
   menuItemId String
   menuItem   menuItem @relation(fields: [menuItemId], references: [id])
-  user       User    @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
 }

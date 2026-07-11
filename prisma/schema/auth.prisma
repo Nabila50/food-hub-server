@@ -1,4 +1,3 @@
-
 model Session {
   id        String   @id
   expiresAt DateTime

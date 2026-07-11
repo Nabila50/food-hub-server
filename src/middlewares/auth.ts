@@ -1,5 +1,7 @@
 import { NextFunction, Request, Response } from "express";
-import { auth as betterAuth } from "./../lib/auth";
+
+
+import {auth as betterAuth} from "../lib/auth"
 
 export enum UserRole {
   CUSTOMER = "CUSTOMER",
@@ -24,21 +26,20 @@ declare global {
 const auth = (...roles: UserRole[]) => {
   return async (req: Request, res: Response, next: NextFunction) => {
     try {
-      console.log("Cookie header:");
-      console.log(req.headers.cookie);
-
-      console.log("Authorization:");
-      console.log(req.headers.authorization);
+      console.log("========== AUTH ==========");
+      console.log("COOKIE:", req.headers.cookie);
+      console.log("HEADERS:", req.headers);
 
       //get provider session
 
       const session = await betterAuth.api.getSession({
-        headers: req.headers as any,
+        headers: req.headers as any
       });
+      console.log("SESSION:", session);
       if (!session) {
         return res.status(401).json({
           success: false,
-          message: "You are not authorized!",
+          message: "You are not authorized! cz session is not found",
         });
       }
 

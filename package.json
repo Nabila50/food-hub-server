@@ -5,6 +5,7 @@
     "@types/node": "^25.9.1",
     "@types/nodemailer": "^8.0.0",
     "@types/pg": "^8.20.0",
+    "dotenv": "^17.4.2",
     "prisma": "^7.8.0",
     "tsx": "^4.22.3",
     "typescript": "^6.0.3"
@@ -18,7 +19,6 @@
     "@prisma/client": "^7.8.0",
     "better-auth": "^1.6.11",
     "cors": "^2.8.6",
-    "dotenv": "^17.4.2",
     "esbuild": "^0.28.0",
     "express": "^5.2.1",
     "nodemailer": "^8.0.8",
@@ -32,7 +32,7 @@
     "dev": "npx tsx watch src/server.ts",
     "seed:admin": "npx tsx src/scripts/seedAdmin.ts",
     "build": "prisma generate && tsc && node src/scripts/fix-imports.js",
-    "stripe:webhook":"stripe listen --forward-to localhost:5000/webhook"
+    "stripe:webhook": "stripe listen --forward-to localhost:5000/webhook"
   },
   "keywords": [],
   "author": "",

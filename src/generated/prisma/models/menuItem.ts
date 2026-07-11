@@ -9,8 +9,8 @@
  * 🟢 You can import this file directly.
  */
 import type * as runtime from "@prisma/client/runtime/client"
-import type * as $Enums from "../enums.js"
-import type * as Prisma from "../internal/prismaNamespace.js"
+import type * as $Enums from "../enums"
+import type * as Prisma from "../internal/prismaNamespace"
 
 /**
  * Model menuItem
@@ -44,6 +44,7 @@ export type MenuItemMinAggregateOutputType = {
   menuId: string | null
   image: string | null
   providerId: string | null
+  paymentStatus: $Enums.PaymentStatus | null
 }
 
 export type MenuItemMaxAggregateOutputType = {
@@ -56,6 +57,7 @@ export type MenuItemMaxAggregateOutputType = {
   menuId: string | null
   image: string | null
   providerId: string | null
+  paymentStatus: $Enums.PaymentStatus | null
 }
 
 export type MenuItemCountAggregateOutputType = {
@@ -68,6 +70,7 @@ export type MenuItemCountAggregateOutputType = {
   menuId: number
   image: number
   providerId: number
+  paymentStatus: number
   _all: number
 }
 
@@ -90,6 +93,7 @@ export type MenuItemMinAggregateInputType = {
   menuId?: true
   image?: true
   providerId?: true
+  paymentStatus?: true
 }
 
 export type MenuItemMaxAggregateInputType = {
@@ -102,6 +106,7 @@ export type MenuItemMaxAggregateInputType = {
   menuId?: true
   image?: true
   providerId?: true
+  paymentStatus?: true
 }
 
 export type MenuItemCountAggregateInputType = {
@@ -114,6 +119,7 @@ export type MenuItemCountAggregateInputType = {
   menuId?: true
   image?: true
   providerId?: true
+  paymentStatus?: true
   _all?: true
 }
 
@@ -213,6 +219,7 @@ export type MenuItemGroupByOutputType = {
   menuId: string
   image: string | null
   providerId: string | null
+  paymentStatus: $Enums.PaymentStatus
   _count: MenuItemCountAggregateOutputType | null
   _avg: MenuItemAvgAggregateOutputType | null
   _sum: MenuItemSumAggregateOutputType | null
@@ -248,10 +255,12 @@ export type menuItemWhereInput = {
   menuId?: Prisma.StringFilter<"menuItem"> | string
   image?: Prisma.StringNullableFilter<"menuItem"> | string | null
   providerId?: Prisma.StringNullableFilter<"menuItem"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"menuItem"> | $Enums.PaymentStatus
   items?: Prisma.OrderItemListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   menu?: Prisma.XOR<Prisma.MenuScalarRelationFilter, Prisma.MenuWhereInput>
   provider?: Prisma.XOR<Prisma.ProviderNullableScalarRelationFilter, Prisma.ProviderWhereInput> | null
+  payment?: Prisma.PaymentListRelationFilter
 }
 
 export type menuItemOrderByWithRelationInput = {
@@ -264,10 +273,12 @@ export type menuItemOrderByWithRelationInput = {
   menuId?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   providerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   items?: Prisma.OrderItemOrderByRelationAggregateInput
   reviews?: Prisma.ReviewOrderByRelationAggregateInput
   menu?: Prisma.MenuOrderByWithRelationInput
   provider?: Prisma.ProviderOrderByWithRelationInput
+  payment?: Prisma.PaymentOrderByRelationAggregateInput
 }
 
 export type menuItemWhereUniqueInput = Prisma.AtLeast<{
@@ -283,10 +294,12 @@ export type menuItemWhereUniqueInput = Prisma.AtLeast<{
   menuId?: Prisma.StringFilter<"menuItem"> | string
   image?: Prisma.StringNullableFilter<"menuItem"> | string | null
   providerId?: Prisma.StringNullableFilter<"menuItem"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"menuItem"> | $Enums.PaymentStatus
   items?: Prisma.OrderItemListRelationFilter
   reviews?: Prisma.ReviewListRelationFilter
   menu?: Prisma.XOR<Prisma.MenuScalarRelationFilter, Prisma.MenuWhereInput>
   provider?: Prisma.XOR<Prisma.ProviderNullableScalarRelationFilter, Prisma.ProviderWhereInput> | null
+  payment?: Prisma.PaymentListRelationFilter
 }, "id">
 
 export type menuItemOrderByWithAggregationInput = {
@@ -299,6 +312,7 @@ export type menuItemOrderByWithAggregationInput = {
   menuId?: Prisma.SortOrder
   image?: Prisma.SortOrderInput | Prisma.SortOrder
   providerId?: Prisma.SortOrderInput | Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
   _count?: Prisma.menuItemCountOrderByAggregateInput
   _avg?: Prisma.menuItemAvgOrderByAggregateInput
   _max?: Prisma.menuItemMaxOrderByAggregateInput
@@ -319,6 +333,7 @@ export type menuItemScalarWhereWithAggregatesInput = {
   menuId?: Prisma.StringWithAggregatesFilter<"menuItem"> | string
   image?: Prisma.StringNullableWithAggregatesFilter<"menuItem"> | string | null
   providerId?: Prisma.StringNullableWithAggregatesFilter<"menuItem"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusWithAggregatesFilter<"menuItem"> | $Enums.PaymentStatus
 }
 
 export type menuItemCreateInput = {
@@ -329,10 +344,12 @@ export type menuItemCreateInput = {
   isAvailable?: boolean
   isFeatured?: boolean
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemCreateNestedManyWithoutMenuItemInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutMenuItemInput
   menu: Prisma.MenuCreateNestedOneWithoutMenuItemInput
   provider?: Prisma.ProviderCreateNestedOneWithoutMenuItemInput
+  payment?: Prisma.PaymentCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemUncheckedCreateInput = {
@@ -345,8 +362,10 @@ export type menuItemUncheckedCreateInput = {
   menuId: string
   image?: string | null
   providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutMenuItemInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutMenuItemInput
+  payment?: Prisma.PaymentUncheckedCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemUpdateInput = {
@@ -357,10 +376,12 @@ export type menuItemUpdateInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutMenuItemNestedInput
   menu?: Prisma.MenuUpdateOneRequiredWithoutMenuItemNestedInput
   provider?: Prisma.ProviderUpdateOneWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateInput = {
@@ -373,8 +394,10 @@ export type menuItemUncheckedUpdateInput = {
   menuId?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUncheckedUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemCreateManyInput = {
@@ -387,6 +410,7 @@ export type menuItemCreateManyInput = {
   menuId: string
   image?: string | null
   providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
 }
 
 export type menuItemUpdateManyMutationInput = {
@@ -397,6 +421,7 @@ export type menuItemUpdateManyMutationInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
 }
 
 export type menuItemUncheckedUpdateManyInput = {
@@ -409,6 +434,7 @@ export type menuItemUncheckedUpdateManyInput = {
   menuId?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
 }
 
 export type MenuItemListRelationFilter = {
@@ -431,6 +457,7 @@ export type menuItemCountOrderByAggregateInput = {
   menuId?: Prisma.SortOrder
   image?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
 }
 
 export type menuItemAvgOrderByAggregateInput = {
@@ -447,6 +474,7 @@ export type menuItemMaxOrderByAggregateInput = {
   menuId?: Prisma.SortOrder
   image?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
 }
 
 export type menuItemMinOrderByAggregateInput = {
@@ -459,6 +487,7 @@ export type menuItemMinOrderByAggregateInput = {
   menuId?: Prisma.SortOrder
   image?: Prisma.SortOrder
   providerId?: Prisma.SortOrder
+  paymentStatus?: Prisma.SortOrder
 }
 
 export type menuItemSumOrderByAggregateInput = {
@@ -520,6 +549,10 @@ export type DecimalFieldUpdateOperationsInput = {
   divide?: runtime.Decimal | runtime.DecimalJsLike | number | string
 }
 
+export type EnumPaymentStatusFieldUpdateOperationsInput = {
+  set?: $Enums.PaymentStatus
+}
+
 export type menuItemCreateNestedOneWithoutItemsInput = {
   create?: Prisma.XOR<Prisma.menuItemCreateWithoutItemsInput, Prisma.menuItemUncheckedCreateWithoutItemsInput>
   connectOrCreate?: Prisma.menuItemCreateOrConnectWithoutItemsInput
@@ -532,6 +565,20 @@ export type menuItemUpdateOneRequiredWithoutItemsNestedInput = {
   upsert?: Prisma.menuItemUpsertWithoutItemsInput
   connect?: Prisma.menuItemWhereUniqueInput
   update?: Prisma.XOR<Prisma.XOR<Prisma.menuItemUpdateToOneWithWhereWithoutItemsInput, Prisma.menuItemUpdateWithoutItemsInput>, Prisma.menuItemUncheckedUpdateWithoutItemsInput>
+}
+
+export type menuItemCreateNestedOneWithoutPaymentInput = {
+  create?: Prisma.XOR<Prisma.menuItemCreateWithoutPaymentInput, Prisma.menuItemUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.menuItemCreateOrConnectWithoutPaymentInput
+  connect?: Prisma.menuItemWhereUniqueInput
+}
+
+export type menuItemUpdateOneRequiredWithoutPaymentNestedInput = {
+  create?: Prisma.XOR<Prisma.menuItemCreateWithoutPaymentInput, Prisma.menuItemUncheckedCreateWithoutPaymentInput>
+  connectOrCreate?: Prisma.menuItemCreateOrConnectWithoutPaymentInput
+  upsert?: Prisma.menuItemUpsertWithoutPaymentInput
+  connect?: Prisma.menuItemWhereUniqueInput
+  update?: Prisma.XOR<Prisma.XOR<Prisma.menuItemUpdateToOneWithWhereWithoutPaymentInput, Prisma.menuItemUpdateWithoutPaymentInput>, Prisma.menuItemUncheckedUpdateWithoutPaymentInput>
 }
 
 export type menuItemCreateNestedManyWithoutProviderInput = {
@@ -598,9 +645,11 @@ export type menuItemCreateWithoutMenuInput = {
   isAvailable?: boolean
   isFeatured?: boolean
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemCreateNestedManyWithoutMenuItemInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutMenuItemInput
   provider?: Prisma.ProviderCreateNestedOneWithoutMenuItemInput
+  payment?: Prisma.PaymentCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemUncheckedCreateWithoutMenuInput = {
@@ -612,8 +661,10 @@ export type menuItemUncheckedCreateWithoutMenuInput = {
   isFeatured?: boolean
   image?: string | null
   providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutMenuItemInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutMenuItemInput
+  payment?: Prisma.PaymentUncheckedCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemCreateOrConnectWithoutMenuInput = {
@@ -655,6 +706,7 @@ export type menuItemScalarWhereInput = {
   menuId?: Prisma.StringFilter<"menuItem"> | string
   image?: Prisma.StringNullableFilter<"menuItem"> | string | null
   providerId?: Prisma.StringNullableFilter<"menuItem"> | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFilter<"menuItem"> | $Enums.PaymentStatus
 }
 
 export type menuItemCreateWithoutItemsInput = {
@@ -665,9 +717,11 @@ export type menuItemCreateWithoutItemsInput = {
   isAvailable?: boolean
   isFeatured?: boolean
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   reviews?: Prisma.ReviewCreateNestedManyWithoutMenuItemInput
   menu: Prisma.MenuCreateNestedOneWithoutMenuItemInput
   provider?: Prisma.ProviderCreateNestedOneWithoutMenuItemInput
+  payment?: Prisma.PaymentCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemUncheckedCreateWithoutItemsInput = {
@@ -680,7 +734,9 @@ export type menuItemUncheckedCreateWithoutItemsInput = {
   menuId: string
   image?: string | null
   providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutMenuItemInput
+  payment?: Prisma.PaymentUncheckedCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemCreateOrConnectWithoutItemsInput = {
@@ -707,9 +763,11 @@ export type menuItemUpdateWithoutItemsInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   reviews?: Prisma.ReviewUpdateManyWithoutMenuItemNestedInput
   menu?: Prisma.MenuUpdateOneRequiredWithoutMenuItemNestedInput
   provider?: Prisma.ProviderUpdateOneWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateWithoutItemsInput = {
@@ -722,6 +780,84 @@ export type menuItemUncheckedUpdateWithoutItemsInput = {
   menuId?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  reviews?: Prisma.ReviewUncheckedUpdateManyWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUncheckedUpdateManyWithoutMenuItemNestedInput
+}
+
+export type menuItemCreateWithoutPaymentInput = {
+  id?: string
+  name?: string | null
+  description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAvailable?: boolean
+  isFeatured?: boolean
+  image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  items?: Prisma.OrderItemCreateNestedManyWithoutMenuItemInput
+  reviews?: Prisma.ReviewCreateNestedManyWithoutMenuItemInput
+  menu: Prisma.MenuCreateNestedOneWithoutMenuItemInput
+  provider?: Prisma.ProviderCreateNestedOneWithoutMenuItemInput
+}
+
+export type menuItemUncheckedCreateWithoutPaymentInput = {
+  id?: string
+  name?: string | null
+  description: string
+  price: runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAvailable?: boolean
+  isFeatured?: boolean
+  menuId: string
+  image?: string | null
+  providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
+  items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutMenuItemInput
+  reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutMenuItemInput
+}
+
+export type menuItemCreateOrConnectWithoutPaymentInput = {
+  where: Prisma.menuItemWhereUniqueInput
+  create: Prisma.XOR<Prisma.menuItemCreateWithoutPaymentInput, Prisma.menuItemUncheckedCreateWithoutPaymentInput>
+}
+
+export type menuItemUpsertWithoutPaymentInput = {
+  update: Prisma.XOR<Prisma.menuItemUpdateWithoutPaymentInput, Prisma.menuItemUncheckedUpdateWithoutPaymentInput>
+  create: Prisma.XOR<Prisma.menuItemCreateWithoutPaymentInput, Prisma.menuItemUncheckedCreateWithoutPaymentInput>
+  where?: Prisma.menuItemWhereInput
+}
+
+export type menuItemUpdateToOneWithWhereWithoutPaymentInput = {
+  where?: Prisma.menuItemWhereInput
+  data: Prisma.XOR<Prisma.menuItemUpdateWithoutPaymentInput, Prisma.menuItemUncheckedUpdateWithoutPaymentInput>
+}
+
+export type menuItemUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  items?: Prisma.OrderItemUpdateManyWithoutMenuItemNestedInput
+  reviews?: Prisma.ReviewUpdateManyWithoutMenuItemNestedInput
+  menu?: Prisma.MenuUpdateOneRequiredWithoutMenuItemNestedInput
+  provider?: Prisma.ProviderUpdateOneWithoutMenuItemNestedInput
+}
+
+export type menuItemUncheckedUpdateWithoutPaymentInput = {
+  id?: Prisma.StringFieldUpdateOperationsInput | string
+  name?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  description?: Prisma.StringFieldUpdateOperationsInput | string
+  price?: Prisma.DecimalFieldUpdateOperationsInput | runtime.Decimal | runtime.DecimalJsLike | number | string
+  isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
+  menuId?: Prisma.StringFieldUpdateOperationsInput | string
+  image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
+  items?: Prisma.OrderItemUncheckedUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutMenuItemNestedInput
 }
 
@@ -733,9 +869,11 @@ export type menuItemCreateWithoutProviderInput = {
   isAvailable?: boolean
   isFeatured?: boolean
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemCreateNestedManyWithoutMenuItemInput
   reviews?: Prisma.ReviewCreateNestedManyWithoutMenuItemInput
   menu: Prisma.MenuCreateNestedOneWithoutMenuItemInput
+  payment?: Prisma.PaymentCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemUncheckedCreateWithoutProviderInput = {
@@ -747,8 +885,10 @@ export type menuItemUncheckedCreateWithoutProviderInput = {
   isFeatured?: boolean
   menuId: string
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutMenuItemInput
   reviews?: Prisma.ReviewUncheckedCreateNestedManyWithoutMenuItemInput
+  payment?: Prisma.PaymentUncheckedCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemCreateOrConnectWithoutProviderInput = {
@@ -785,9 +925,11 @@ export type menuItemCreateWithoutReviewsInput = {
   isAvailable?: boolean
   isFeatured?: boolean
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemCreateNestedManyWithoutMenuItemInput
   menu: Prisma.MenuCreateNestedOneWithoutMenuItemInput
   provider?: Prisma.ProviderCreateNestedOneWithoutMenuItemInput
+  payment?: Prisma.PaymentCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemUncheckedCreateWithoutReviewsInput = {
@@ -800,7 +942,9 @@ export type menuItemUncheckedCreateWithoutReviewsInput = {
   menuId: string
   image?: string | null
   providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedCreateNestedManyWithoutMenuItemInput
+  payment?: Prisma.PaymentUncheckedCreateNestedManyWithoutMenuItemInput
 }
 
 export type menuItemCreateOrConnectWithoutReviewsInput = {
@@ -827,9 +971,11 @@ export type menuItemUpdateWithoutReviewsInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUpdateManyWithoutMenuItemNestedInput
   menu?: Prisma.MenuUpdateOneRequiredWithoutMenuItemNestedInput
   provider?: Prisma.ProviderUpdateOneWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateWithoutReviewsInput = {
@@ -842,7 +988,9 @@ export type menuItemUncheckedUpdateWithoutReviewsInput = {
   menuId?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUncheckedUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemCreateManyMenuInput = {
@@ -854,6 +1002,7 @@ export type menuItemCreateManyMenuInput = {
   isFeatured?: boolean
   image?: string | null
   providerId?: string | null
+  paymentStatus?: $Enums.PaymentStatus
 }
 
 export type menuItemUpdateWithoutMenuInput = {
@@ -864,9 +1013,11 @@ export type menuItemUpdateWithoutMenuInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutMenuItemNestedInput
   provider?: Prisma.ProviderUpdateOneWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateWithoutMenuInput = {
@@ -878,8 +1029,10 @@ export type menuItemUncheckedUpdateWithoutMenuInput = {
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUncheckedUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateManyWithoutMenuInput = {
@@ -891,6 +1044,7 @@ export type menuItemUncheckedUpdateManyWithoutMenuInput = {
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
   providerId?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
 }
 
 export type menuItemCreateManyProviderInput = {
@@ -902,6 +1056,7 @@ export type menuItemCreateManyProviderInput = {
   isFeatured?: boolean
   menuId: string
   image?: string | null
+  paymentStatus?: $Enums.PaymentStatus
 }
 
 export type menuItemUpdateWithoutProviderInput = {
@@ -912,9 +1067,11 @@ export type menuItemUpdateWithoutProviderInput = {
   isAvailable?: Prisma.BoolFieldUpdateOperationsInput | boolean
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUpdateManyWithoutMenuItemNestedInput
   menu?: Prisma.MenuUpdateOneRequiredWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateWithoutProviderInput = {
@@ -926,8 +1083,10 @@ export type menuItemUncheckedUpdateWithoutProviderInput = {
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   menuId?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
   items?: Prisma.OrderItemUncheckedUpdateManyWithoutMenuItemNestedInput
   reviews?: Prisma.ReviewUncheckedUpdateManyWithoutMenuItemNestedInput
+  payment?: Prisma.PaymentUncheckedUpdateManyWithoutMenuItemNestedInput
 }
 
 export type menuItemUncheckedUpdateManyWithoutProviderInput = {
@@ -939,6 +1098,7 @@ export type menuItemUncheckedUpdateManyWithoutProviderInput = {
   isFeatured?: Prisma.BoolFieldUpdateOperationsInput | boolean
   menuId?: Prisma.StringFieldUpdateOperationsInput | string
   image?: Prisma.NullableStringFieldUpdateOperationsInput | string | null
+  paymentStatus?: Prisma.EnumPaymentStatusFieldUpdateOperationsInput | $Enums.PaymentStatus
 }
 
 
@@ -949,11 +1109,13 @@ export type menuItemUncheckedUpdateManyWithoutProviderInput = {
 export type MenuItemCountOutputType = {
   items: number
   reviews: number
+  payment: number
 }
 
 export type MenuItemCountOutputTypeSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | MenuItemCountOutputTypeCountItemsArgs
   reviews?: boolean | MenuItemCountOutputTypeCountReviewsArgs
+  payment?: boolean | MenuItemCountOutputTypeCountPaymentArgs
 }
 
 /**
@@ -980,6 +1142,13 @@ export type MenuItemCountOutputTypeCountReviewsArgs<ExtArgs extends runtime.Type
   where?: Prisma.ReviewWhereInput
 }
 
+/**
+ * MenuItemCountOutputType without action
+ */
+export type MenuItemCountOutputTypeCountPaymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  where?: Prisma.PaymentWhereInput
+}
+
 
 export type menuItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetSelect<{
   id?: boolean
@@ -991,10 +1160,12 @@ export type menuItemSelect<ExtArgs extends runtime.Types.Extensions.InternalArgs
   menuId?: boolean
   image?: boolean
   providerId?: boolean
+  paymentStatus?: boolean
   items?: boolean | Prisma.menuItem$itemsArgs<ExtArgs>
   reviews?: boolean | Prisma.menuItem$reviewsArgs<ExtArgs>
   menu?: boolean | Prisma.MenuDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.menuItem$providerArgs<ExtArgs>
+  payment?: boolean | Prisma.menuItem$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.MenuItemCountOutputTypeDefaultArgs<ExtArgs>
 }, ExtArgs["result"]["menuItem"]>
 
@@ -1008,6 +1179,7 @@ export type menuItemSelectCreateManyAndReturn<ExtArgs extends runtime.Types.Exte
   menuId?: boolean
   image?: boolean
   providerId?: boolean
+  paymentStatus?: boolean
   menu?: boolean | Prisma.MenuDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.menuItem$providerArgs<ExtArgs>
 }, ExtArgs["result"]["menuItem"]>
@@ -1022,6 +1194,7 @@ export type menuItemSelectUpdateManyAndReturn<ExtArgs extends runtime.Types.Exte
   menuId?: boolean
   image?: boolean
   providerId?: boolean
+  paymentStatus?: boolean
   menu?: boolean | Prisma.MenuDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.menuItem$providerArgs<ExtArgs>
 }, ExtArgs["result"]["menuItem"]>
@@ -1036,14 +1209,16 @@ export type menuItemSelectScalar = {
   menuId?: boolean
   image?: boolean
   providerId?: boolean
+  paymentStatus?: boolean
 }
 
-export type menuItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "isAvailable" | "isFeatured" | "menuId" | "image" | "providerId", ExtArgs["result"]["menuItem"]>
+export type menuItemOmit<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = runtime.Types.Extensions.GetOmit<"id" | "name" | "description" | "price" | "isAvailable" | "isFeatured" | "menuId" | "image" | "providerId" | "paymentStatus", ExtArgs["result"]["menuItem"]>
 export type menuItemInclude<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
   items?: boolean | Prisma.menuItem$itemsArgs<ExtArgs>
   reviews?: boolean | Prisma.menuItem$reviewsArgs<ExtArgs>
   menu?: boolean | Prisma.MenuDefaultArgs<ExtArgs>
   provider?: boolean | Prisma.menuItem$providerArgs<ExtArgs>
+  payment?: boolean | Prisma.menuItem$paymentArgs<ExtArgs>
   _count?: boolean | Prisma.MenuItemCountOutputTypeDefaultArgs<ExtArgs>
 }
 export type menuItemIncludeCreateManyAndReturn<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
@@ -1062,6 +1237,7 @@ export type $menuItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     reviews: Prisma.$ReviewPayload<ExtArgs>[]
     menu: Prisma.$MenuPayload<ExtArgs>
     provider: Prisma.$ProviderPayload<ExtArgs> | null
+    payment: Prisma.$PaymentPayload<ExtArgs>[]
   }
   scalars: runtime.Types.Extensions.GetPayloadResult<{
     id: string
@@ -1073,6 +1249,7 @@ export type $menuItemPayload<ExtArgs extends runtime.Types.Extensions.InternalAr
     menuId: string
     image: string | null
     providerId: string | null
+    paymentStatus: $Enums.PaymentStatus
   }, ExtArgs["result"]["menuItem"]>
   composites: {}
 }
@@ -1471,6 +1648,7 @@ export interface Prisma__menuItemClient<T, Null = never, ExtArgs extends runtime
   reviews<T extends Prisma.menuItem$reviewsArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.menuItem$reviewsArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$ReviewPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   menu<T extends Prisma.MenuDefaultArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.MenuDefaultArgs<ExtArgs>>): Prisma.Prisma__MenuClient<runtime.Types.Result.GetResult<Prisma.$MenuPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
   provider<T extends Prisma.menuItem$providerArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.menuItem$providerArgs<ExtArgs>>): Prisma.Prisma__ProviderClient<runtime.Types.Result.GetResult<Prisma.$ProviderPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+  payment<T extends Prisma.menuItem$paymentArgs<ExtArgs> = {}>(args?: Prisma.Subset<T, Prisma.menuItem$paymentArgs<ExtArgs>>): Prisma.PrismaPromise<runtime.Types.Result.GetResult<Prisma.$PaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
   /**
    * Attaches callbacks for the resolution and/or rejection of the Promise.
    * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -1509,6 +1687,7 @@ export interface menuItemFieldRefs {
   readonly menuId: Prisma.FieldRef<"menuItem", 'String'>
   readonly image: Prisma.FieldRef<"menuItem", 'String'>
   readonly providerId: Prisma.FieldRef<"menuItem", 'String'>
+  readonly paymentStatus: Prisma.FieldRef<"menuItem", 'PaymentStatus'>
 }
     
 
@@ -1974,6 +2153,30 @@ export type menuItem$providerArgs<ExtArgs extends runtime.Types.Extensions.Inter
    */
   include?: Prisma.ProviderInclude<ExtArgs> | null
   where?: Prisma.ProviderWhereInput
+}
+
+/**
+ * menuItem.payment
+ */
+export type menuItem$paymentArgs<ExtArgs extends runtime.Types.Extensions.InternalArgs = runtime.Types.Extensions.DefaultArgs> = {
+  /**
+   * Select specific fields to fetch from the Payment
+   */
+  select?: Prisma.PaymentSelect<ExtArgs> | null
+  /**
+   * Omit specific fields from the Payment
+   */
+  omit?: Prisma.PaymentOmit<ExtArgs> | null
+  /**
+   * Choose, which related nodes to fetch as well
+   */
+  include?: Prisma.PaymentInclude<ExtArgs> | null
+  where?: Prisma.PaymentWhereInput
+  orderBy?: Prisma.PaymentOrderByWithRelationInput | Prisma.PaymentOrderByWithRelationInput[]
+  cursor?: Prisma.PaymentWhereUniqueInput
+  take?: number
+  skip?: number
+  distinct?: Prisma.PaymentScalarFieldEnum | Prisma.PaymentScalarFieldEnum[]
 }
 
 /**
